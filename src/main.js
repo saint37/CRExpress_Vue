@@ -18,5 +18,6 @@ new Vue({
   el: '#app',
   //template: '<App/>',
   //components: { App },
+  router, 
   render: h => h(App)
-})
+}).$mount('#app')

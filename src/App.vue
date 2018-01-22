@@ -7,7 +7,8 @@
                 <leftMenu></leftMenu>
             </vue-scrollbar>
             <vue-scrollbar classes="my-scrollbar" ref="Scrollbar" style="width: calc(100% - 200px);">
-                <User></User>
+                <!-- <User></User> -->
+                <router-view></router-view>
             </vue-scrollbar>
         </el-container>
     </el-container>
@@ -20,13 +21,11 @@
 import VueScrollbar from 'vue2-scrollbar'
 import topBar from './components/topBar'
 import leftMenu from'./components/leftMenu'
-import User from'./components/User'
 export default {
     name: 'app',
     components: {
         topBar,
         leftMenu,
-        User,
         VueScrollbar
     },
     data () {

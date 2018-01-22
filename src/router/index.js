@@ -3,11 +3,15 @@ import Router from 'vue-router'
 import topBar from '@/components/topBar'
 import leftMenu from'@/components/leftMenu'
 import User from'@/components/User'
+import test from'@/components/test'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path: '/', redirect: 'User'
+    },
     {
       path: '/',
       name: 'topBar',
@@ -19,9 +23,14 @@ export default new Router({
       component: leftMenu
     },
     {
-      path: '/',
+      path: '/user',
       name: 'User',
       component: User
+    },
+    {
+      path: '/test',
+      name: 'test',
+      component: test
     }
   ]
 })
