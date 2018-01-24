@@ -6,15 +6,15 @@
                 <span>你好，{{ CurrentUser }}</span>
             </div>
             <el-row :gutter="20">
-                <el-col :span="6">单位：</el-col>
-                <el-col :span="6">真实姓名：</el-col>
-                <el-col :span="6">性别：</el-col>
-                <el-col :span="6">电话：</el-col>
-            </el-row>
-            <el-row :gutter="20">
                 <el-col :span="6">用户名：</el-col>
                 <el-col :span="6">密码：</el-col>
                 <el-col :span="6">用户类别：</el-col>
+                <el-col :span="6">单位：</el-col>
+            </el-row>
+            <el-row :gutter="20">
+                <el-col :span="6">真实姓名：</el-col>
+                <el-col :span="6">性别：</el-col>
+                <el-col :span="6">电话：</el-col>
             </el-row>
         </el-card>
         <el-row style="margin: 20px 0">
@@ -27,7 +27,7 @@
                 <el-form :inline="true" :model="searchForm" class="demo-form-inline">  
                     <el-form-item label="单位">  
                         <el-input v-model="searchForm.name" placeholder="单位"></el-input>  
-                    </el-form-item>  
+                    </el-form-item>
                     <el-form-item>  
                         <el-button type="primary" icon="search" @click="searchClick">查询</el-button>  
                         <el-button type="success" icon="plus" @click="addClick">新建用户</el-button>  
@@ -43,21 +43,21 @@
                     tooltip-effect="dark"
                     style="width: 100%"
                     @selection-change="selectionChange">
-                    <el-table-column type="selection" width="55" align="center">
-                    </el-table-column>
-                    <el-table-column prop="date" label="日期" width="140">
-                    </el-table-column>
-                    <el-table-column prop="name" label="姓名" width="120">
-                    </el-table-column>
-                    <el-table-column prop="address" label="地址">
-                    </el-table-column>
+                    <el-table-column type="selection" width="55" align="center"></el-table-column>
+                    <el-table-column prop="username" label="用户名" width="120"></el-table-column>
+                    <el-table-column prop="password" label="密码" width="120"></el-table-column>
+                    <el-table-column prop="userRoleStr" label="用户类别"></el-table-column>
+                    <el-table-column prop="orgName" label="单位"></el-table-column>
+                    <el-table-column prop="realName" label="真实姓名"></el-table-column>
+                    <el-table-column prop="gender" label="性别"></el-table-column>
+                    <el-table-column prop="mobile" label="电话"></el-table-column>
                     <el-table-column  
                         label="操作">  
-                    <template scope="scope">  
-                        <el-button type="primary" size="small" icon="edit" @click="editClick(scope.row)">编辑</el-button>
-                        <el-button type="danger" size="small" icon="delete" @click="deleteClick(scope.row)">删除</el-button>  
-                    </template>  
-                </el-table-column>  
+                        <template scope="scope">  
+                            <el-button type="primary" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
+                            <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button>  
+                        </template>  
+                    </el-table-column>  
                 </el-table>        
             </el-row>
             <!--列表底部工具条和分页符-->  
@@ -80,17 +80,35 @@
             </el-row>  
         </el-row>
         <!--编辑界面-->  
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">  
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">  
-                <el-form-item label="日期">  
-                    <el-date-picker type="date" placeholder="选择日期" v-model="editForm.date"></el-date-picker>  
-                </el-form-item>  
-                <el-form-item label="姓名" prop="name">  
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>  
+        <el-dialog title="用户信息" :visible.sync="editFormVisible" :close-on-click-modal="false">  
+            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm" size="small">  
+                <el-form-item label="用户名" prop="username">  
+                    <el-input v-model="editForm.username" auto-complete="off"></el-input>  
                 </el-form-item>   
-                <el-form-item label="地址">  
-                    <el-input type="textarea" v-model="editForm.address"></el-input>  
+                <el-form-item label="密码" prop="password">  
+                    <el-input v-model="editForm.password"></el-input>  
                 </el-form-item>  
+                <el-form-item label="确认密码" prop="checkPass">  
+                    <el-input v-model="editForm.checkPass"></el-input>  
+                </el-form-item> 
+                <el-form-item label="用户类别" prop="userRoleStr">  
+                    <el-input v-model="editForm.userRoleStr"></el-input>  
+                </el-form-item>  
+                <el-form-item label="单位" prop="orgName">  
+                    <el-input v-model="editForm.orgName"></el-input>  
+                </el-form-item> 
+                <el-form-item label="真实姓名" prop="realName">  
+                    <el-input v-model="editForm.realName"></el-input>  
+                </el-form-item>
+                <el-form-item label="性别" prop="gender">  
+                    <el-radio-group v-model="editForm.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="电话" prop="mobile">  
+                    <el-input v-model="editForm.mobile"></el-input>  
+                </el-form-item> 
             </el-form>  
             <div slot="footer" class="dialog-footer">  
                 <el-button @click.native="editFormVisible = false">取消</el-button>  
@@ -105,43 +123,91 @@ export default {
   name: 'Admin',
   data () {
     const item = {
-        date: '2018-01-16',
-        name: 'ST',
-        address: '北京市海淀区大柳树路2号'
+        username: 'Saint',
+        password: '12345',
+        roleId: '1',
+        userRoleStr: '管理员',
+        orgId: '',
+        orgName: '铁科院',
+        realName: '',
+        gender: '女',
+        mobile: '15910560070'
     };
     return {
         CurrentUser: "Saint",
         //是否显示用户列表开关
-        ShowUserList: false,
+        ShowUserList: true,
         //tableData: Array(20).fill(item),
         tableData: [{
-          date: '2016-05-03',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }, {
-          date: '2016-05-02',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Bread',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '男',
+            mobile: ''
         }, {
-          date: '2016-05-04',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }, {
-          date: '2016-05-01',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }, {
-          date: '2016-05-08',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }, {
-          date: '2016-05-06',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }, {
-          date: '2016-05-07',
-          name: 'ST',
-          address: '北京市海淀区大柳树路2号'
+            username: 'Saint',
+            password: '12345',
+            roleId: '1',
+            userRoleStr: '管理员',
+            orgId: '',
+            orgName: '铁科院',
+            realName: '',
+            gender: '女',
+            mobile: '15910560070'
         }],
         //显示加载中样式  
         loading:false,  
@@ -163,16 +229,29 @@ export default {
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
-            name: [  
-                { required: true, message: '请输入姓名', trigger: 'blur' }  
-            ]  
+            realName: [  
+                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
+            ],
+            gender: [
+                { required: true, trigger: 'blur' }
+            ],
+            mobile: [
+                { required: true, message: '请输入联系电话', trigger: 'blur' }
+            ]
         },  
         //编辑界面数据  
         editForm: {  
             id: 0,  
-            name: '',  
-            date: '',  
-            address: ''  
+            username: '',
+            password: '',
+            checkPass: '',
+            roleId: 0,
+            userRoleStr: '',
+            orgId: 0,
+            orgName: '',
+            realName: '',
+            gender: '',
+            mobile: ''
         },  
     }
   },
@@ -283,5 +362,9 @@ export default {
 .box-card{
     color: #5a5e66;
     font-size: 14px;
+}
+.mybtn{
+    padding: 4px;
+    margin: 0;
 }
 </style>

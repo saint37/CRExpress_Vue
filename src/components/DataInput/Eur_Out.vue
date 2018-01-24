@@ -1,25 +1,45 @@
 <template>
     <el-main>
-        <h1>{{ Org }}铁路局集团公司中欧班列去程运量统计表</h1>
-        <!--列表顶部搜索和工具条-->
-        <el-row>  
+        <el-row>
             <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
+                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
+                <el-form-item label="铁路局">  
+                    <el-input v-model="saveForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
+                </el-form-item> 
                 <el-form-item label="填表人">  
-                    <el-input v-model="saveForm.name" placeholder="填表人"></el-input>  
+                    <el-input v-model="saveForm.realName" :disabled="true" size="mini" placeholder="填表人"></el-input>  
                 </el-form-item>  
                 <el-form-item label="联系电话">  
-                    <el-input v-model="saveForm.phone" placeholder="电话"></el-input>  
+                    <el-input v-model="saveForm.mobile" :disabled="true" size="mini" placeholder="电话"></el-input>  
                 </el-form-item>  
-                <el-form-item label="日期">  
-                    <el-date-picker v-model="saveForm.date" type="date" placeholder="选择日期"></el-date-picker>
+            </el-form>
+        </el-row>
+        
+        <!--列表顶部搜索和工具条-->
+        <el-row>  
+            <el-form :inline="true" :model="searchForm" class="demo-form-inline">  
+                <el-form-item>
+                    <el-select v-model="searchForm.org" placeholder="铁路局">
+                      <el-option label="北京局" value="beijing"></el-option>
+                      <el-option label="太原局" value="taiyuan"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item style="width: 300px">  
+                    <el-col :span="11">
+                      <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date1" style="width: 100%"></el-date-picker>
+                    </el-col>
+                    <el-col class="line" :span="2">-</el-col>
+                    <el-col :span="11">
+                      <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date2" style="width: 100%"></el-date-picker>
+                    </el-col>
                 </el-form-item> 
                 <el-form-item>  
-                    <el-button type="primary" icon="edit" @click="saveClick">保存</el-button>
+                    <el-button type="primary" icon="edit" @click="searchClick">筛选</el-button>
+                    <el-button type="success" icon="edit" @click="addClick">新增</el-button>
                 </el-form-item>  
             </el-form>  
         </el-row>  
         <!--列表-->  
-        <vue-scrollbar classes="my-scrollbar" v-bind:speed=100 >
         <el-row>
             <el-table 
                 ref="multipleTable"
@@ -66,13 +86,13 @@
                 </el-table-column>
                 <el-table-column prop="notes" label="备注"></el-table-column>
             </el-table>
-        </el-row>  
-        </vue-scrollbar>      
+        </el-row>     
 
         <!--列表底部工具条和分页符-->  
         <el-row style="margin-top: 20px" type="flex" justify="end">  
             <el-col :span="6" >  
-                <el-button type="danger" size="small" icon="delete" @click="removeSelection">删除所选</el-button>  
+                <el-button type="primary" size="small" icon="upload" @click="submitSelection">提交所选</el-button> 
+                <el-button type="danger" size="small" icon="delete" @click="removeSelection">删除所选</el-button>
             </el-col>  
             <el-col :span="18" >  
                 <el-pagination  
@@ -88,21 +108,123 @@
             </el-col>  
         </el-row>  
         <!--编辑界面-->  
-        <el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">  
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">  
-                <el-form-item label="日期">  
-                    <el-date-picker type="date" placeholder="选择日期" v-model="editForm.date"></el-date-picker>  
-                </el-form-item>  
-                <el-form-item label="姓名" prop="name">  
-                    <el-input v-model="editForm.name" auto-complete="off"></el-input>  
-                </el-form-item>   
-                <el-form-item label="地址">  
-                    <el-input type="textarea" v-model="editForm.address"></el-input>  
-                </el-form-item>  
+        <el-dialog title="运量统计" :visible.sync="editFormVisible" :close-on-click-modal="false" fullscreen>  
+            <el-form :model="editForm" label-width="140px" :rules="editFormRules" ref="editForm" size="mini"> 
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="发站" prop="fromStation">  
+                            <el-input v-model="editForm.fromStation" auto-complete="off"></el-input>  
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="发车车次" prop="trainNumber">  
+                            <el-input v-model="editForm.trainNumber" auto-complete="off"></el-input>  
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="发车日期">  
+                            <el-date-picker type="date" placeholder="选择日期" v-model="editForm.fromDate" style="width: 150px;"></el-date-picker>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="出境口岸站">  
+                            <el-input v-model="editForm.exitPortStation" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="境外到站">  
+                            <el-input v-model="editForm.overseasStation" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="境外到站所属国">  
+                            <el-input v-model="editForm.overseasCountry" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="境外到站所属城市">  
+                            <el-input v-model="editForm.overseasCity" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="列数">  
+                            <el-input v-model="editForm.trainQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="车数">  
+                            <el-input v-model="editForm.carriageQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="20尺重箱数">  
+                            <el-input v-model="editForm.twHeavyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="20尺空箱数">  
+                            <el-input v-model="editForm.twEmptyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="40尺重箱数">  
+                            <el-input v-model="editForm.ftHeavyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="40尺空箱数">  
+                            <el-input v-model="editForm.ftEmptyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="45尺重箱数">  
+                            <el-input v-model="editForm.ffHeavyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="45尺空箱数">  
+                            <el-input v-model="editForm.ffEmptyQty" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="6">
+                        <el-form-item label="折合TEU">  
+                            <el-input v-model="editForm.TEU" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="其中冷藏箱TEU">  
+                            <el-input v-model="editForm.coldTEU" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                    <el-col :span="6">
+                        <el-form-item label="冷藏箱重量">  
+                            <el-input v-model="editForm.coldWeight" auto-complete="off"></el-input>  
+                        </el-form-item> 
+                    </el-col>
+                </el-row> 
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="备注">  
+                            <el-input type="textarea" v-model="editForm.remark"></el-input>  
+                        </el-form-item>  
+                    </el-col>
+                </el-row>
             </el-form>  
             <div slot="footer" class="dialog-footer">  
                 <el-button @click.native="editFormVisible = false">取消</el-button>  
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>  
+                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>  
             </div>  
         </el-dialog>  
     </el-main>
@@ -145,9 +267,15 @@ export default {
         loading:false,  
         //搜索表单  
         saveForm: {  
-            name: '',  
-            phone: '',
-            date: ''
+            orgName: '',  
+            realName: '',
+            mobile: ''
+        },  
+        //搜索表单  
+        searchForm: {  
+            org: '',  
+            date1: '',
+            date2: ''
         },  
         multipleSelection: [],
         //当前页  
@@ -169,9 +297,25 @@ export default {
         //编辑界面数据  
         editForm: {  
             id: 0,  
-            name: '',  
-            date: '',  
-            address: ''  
+            fromStation: '',  
+            trainNumber: '',  
+            fromDate: '', 
+            exitPortStation: '', 
+            overseasStation: '',
+            overseasCountry: '',
+            overseasCity: '',
+            trainQty: '',
+            carriageQty: '',
+            twHeavyQty: '',
+            twEmptyQty: '',
+            ftHeavyQty: '',
+            ftEmptyQty: '',
+            ffHeavyQty: '',
+            ffEmptyQty: '',
+            TEU: '',
+            coldTEU: '',
+            coldWeight: '',
+            remark: ''  
         },  
     }
   },
@@ -213,11 +357,17 @@ export default {
             //_self.loadingData();//重新加载数据  
         },  
         //表格保存事件  
-        saveClick:function() {  
-            alert("保存");  
+        searchClick:function() {  
+            alert("搜索");  
             var _self = this;  
             _self.loadingData();//重新加载数据  
         },  
+        //表格提交事件  
+        submitSelection:function() {  
+            alert("提交");  
+            var _self = this;  
+            _self.loadingData();//重新加载数据  
+        }, 
         //表格勾选事件  
         selectionChange:function(val) {  
             for(var i=0;i<val.length;i++) {  
@@ -283,5 +433,8 @@ h1{margin-top: 0;}
 .mybtn{
     padding: 4px;
     margin: 0;
+}
+.line{
+    text-align: center;
 }
 </style>
