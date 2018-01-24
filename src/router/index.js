@@ -2,15 +2,17 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import topBar from '@/components/topBar'
 import leftMenu from'@/components/leftMenu'
-import User from'@/components/User'
+import Admin from'@/components/User/Admin'
+import Common from'@/components/User/Common'
 import test from'@/components/test'
+import Eur_Out from'@/components/DataInput/Eur_Out'
 
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path: '/', redirect: 'User'
+      path: '/', redirect: '/User/Admin'
     },
     {
       path: '/',
@@ -23,14 +25,24 @@ export default new Router({
       component: leftMenu
     },
     {
-      path: '/user',
-      name: 'User',
-      component: User
+      path: '/User/Admin',
+      name: 'Admin',
+      component: Admin
+    },
+    {
+      path: '/User/Common',
+      name: 'Common',
+      component: Common
     },
     {
       path: '/test',
       name: 'test',
       component: test
+    },
+    {
+      path: '/DataInput/Eur_Out',
+      name: 'Eur_Out',
+      component: Eur_Out
     }
   ]
 })

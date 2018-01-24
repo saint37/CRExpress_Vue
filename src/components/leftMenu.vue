@@ -1,31 +1,32 @@
 <template>
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu :default-openeds="['1']" router>
+        <el-menu :default-openeds="['1','2']" router>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-menu"></i>用户管理</template>
-              <el-menu-item index="/user">用户管理</el-menu-item>
+              <el-menu-item index="/User/Admin">管理员</el-menu-item>
+              <el-menu-item index="/User/Common">普通用户</el-menu-item>
               <el-menu-item index="/test">test</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-document"></i>导航二</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
-              <el-menu-item index="2-1">选项1</el-menu-item>
-              <el-menu-item index="2-2">选项2</el-menu-item>
+            <template slot="title"><i class="el-icon-edit-outline"></i>数据录入</template>
+            <el-menu-item-group title="中欧班列">
+              <el-menu-item index="/DataInput/Eur_Out">去程运量统计</el-menu-item>
+              <el-menu-item index="2-2">回程运量统计</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="2-3">选项3</el-menu-item>
+            <el-menu-item-group title="中亚班列">
+              <el-menu-item index="2-3">去程运量统计</el-menu-item>
+              <el-menu-item index="2-4">回程运量统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"><i class="el-icon-setting"></i>导航三</template>
-            <el-menu-item-group>
-              <template slot="title">分组一</template>
+            <template slot="title"><i class="el-icon-document"></i>数据统计</template>
+            <el-menu-item-group title="中欧班列">
               <el-menu-item index="3-1">选项1</el-menu-item>
               <el-menu-item index="3-2">选项2</el-menu-item>
             </el-menu-item-group>
-            <el-menu-item-group title="分组2">
+            <el-menu-item-group title="中亚班列">
               <el-menu-item index="3-3">选项3</el-menu-item>
+              <el-menu-item index="3-4">选项4</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>
