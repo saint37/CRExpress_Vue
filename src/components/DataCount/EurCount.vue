@@ -1,27 +1,18 @@
 <template>
     <el-main>
-        <el-row>
-            <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
-                <el-form-item label="铁路局">  
-                    <el-input v-model="saveForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
-                </el-form-item> 
-                <el-form-item label="填表人">  
-                    <el-input v-model="saveForm.realName" :disabled="true" size="mini" placeholder="填表人"></el-input>  
-                </el-form-item>  
-                <el-form-item label="联系电话">  
-                    <el-input v-model="saveForm.mobile" :disabled="true" size="mini" placeholder="电话"></el-input>  
-                </el-form-item>  
-            </el-form>
-        </el-row>
-        
         <!--列表顶部搜索和工具条-->
         <el-row>  
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">  
                 <el-form-item>
-                    <el-select v-model="searchForm.status" placeholder="全部">
-                      <el-option label="全部" value="all"></el-option>
-                      <el-option label="未提交" value="submit"></el-option>
+                    <el-select v-model="searchForm.type" placeholder="去程/回程">
+                      <el-option label="去程" value="beijing"></el-option>
+                      <el-option label="回程" value="taiyuan"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item>
+                    <el-select v-model="searchForm.org" placeholder="铁路局">
+                      <el-option label="北京局" value="beijing"></el-option>
+                      <el-option label="太原局" value="taiyuan"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item style="width: 300px">  
@@ -35,10 +26,23 @@
                 </el-form-item> 
                 <el-form-item>  
                     <el-button type="primary" icon="edit" @click="searchClick">筛选</el-button>
-                    <el-button type="success" icon="edit" @click="addClick">新增</el-button>
                 </el-form-item>  
             </el-form>  
         </el-row>  
+        <el-row>
+            <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
+                <el-form-item><h1>中欧班列运量统计表</h1></el-form-item>
+                <el-form-item label="铁路局">  
+                    <el-input v-model="saveForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
+                </el-form-item> 
+                <el-form-item label="填表人">  
+                    <el-input v-model="saveForm.realName" :disabled="true" size="mini" placeholder="填表人"></el-input>  
+                </el-form-item>  
+                <el-form-item label="联系电话">  
+                    <el-input v-model="saveForm.mobile" :disabled="true" size="mini" placeholder="电话"></el-input>  
+                </el-form-item>  
+            </el-form>
+        </el-row>
         <!--列表-->  
         <el-row>
             <el-table 
@@ -46,15 +50,10 @@
                 :data="tableData"
                 v-loading.body="loading" 
                 tooltip-effect="dark"
+                show-summary
                 @selection-change="selectionChange">
                 <el-table-column type="selection" width="55" align="center">
-                </el-table-column>
-                <el-table-column label="操作">  
-                    <template scope="scope">  
-                        <el-button type="primary" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
-                        <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button>  
-                    </template>  
-                </el-table-column>  
+                </el-table-column> 
                 <el-table-column prop="id" label="序号"></el-table-column>
                 <el-table-column prop="station" label="发站"></el-table-column>
                 <el-table-column prop="name" label="发车车次"></el-table-column>
@@ -90,10 +89,6 @@
 
         <!--列表底部工具条和分页符-->  
         <el-row style="margin-top: 20px" type="flex" justify="end">  
-            <el-col :span="6" >  
-                <el-button type="primary" size="small" icon="upload" @click="submitSelection">提交所选</el-button> 
-                <el-button type="danger" size="small" icon="delete" @click="removeSelection">删除所选</el-button>
-            </el-col>  
             <el-col :span="18" >  
                 <el-pagination  
                         style="float: right"  
@@ -233,7 +228,7 @@
 <script>
 // import VueScrollbar from 'vue2-scrollbar'
 export default {
-  name: 'User',
+  name: 'EurCount',
   // components: {
   //       VueScrollbar
   //   },
@@ -273,7 +268,8 @@ export default {
         },  
         //搜索表单  
         searchForm: {  
-            status: '',  
+            type: '',
+            org: '',  
             date1: '',
             date2: ''
         },  
