@@ -4,7 +4,7 @@
         <div style="float: right;">
             <el-menu :default-active="activeIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" background-color="#1385c5" text-color="#fff" active-text-color="#ffd04b">
               <el-menu-item index="1"><i class="el-icon-bell"></i></el-menu-item>
-              <el-menu-item index="2"><i class="el-icon-close"></i></el-menu-item>
+              <el-menu-item index="2" @click="Logout"><i class="el-icon-close"></i></el-menu-item>
             </el-menu>
         </div>
     </div>
@@ -20,6 +20,18 @@ export default {
     }
   },
   methods: {
+      Logout:function() {
+          var self = this
+          this.$confirm('您确定要退出吗?', '注销用户', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          }).then(() => {
+            sessionStorage.clear();
+            self.$router.push({ path: '/Login' });
+          }).catch(() => {
+
+          })
+      },
       handleSelect(key, keyPath) {
         console.log(key, keyPath);
       }

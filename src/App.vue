@@ -28,7 +28,6 @@ export default {
           this.$http({
             method: 'GET',
             url: 'http://localhost:8080/CRExpress/json.htm',
-            //url: 'a.txt'
           })
           //.get('http://localhost:8080/CRExpress/json.htm')
           .then(response => {

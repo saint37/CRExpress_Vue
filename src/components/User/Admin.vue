@@ -3,7 +3,7 @@
         <!--用户信息部分-->
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span>你好，{{ CurrentUser }}</span>
+                <span v-show="user">你好，{{ user.username }}</span>
             </div>
             <el-row :gutter="20">
                 <el-col :span="6">用户名：</el-col>
@@ -255,6 +255,12 @@ export default {
         },  
     }
   },
+    computed: {
+        user(){
+             //因为在main.js中已经全局注册了store，所以这里直接用this.$直接使用。
+            return this.$store.state.user
+        }
+    },
     methods: {
         //表格重新加载数据  
         loadingData:function() {  
