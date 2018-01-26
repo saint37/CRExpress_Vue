@@ -1,49 +1,24 @@
 <template>
   <div id="app">
-    <el-container>
-        <el-header><topBar></topBar></el-header>
-        <el-container id="layout" style="border: 1px solid #eee">
-            <vue-scrollbar classes="my-scrollbar" ref="Scrollbar">
-                <leftMenu></leftMenu>
-            </vue-scrollbar>
-            <vue-scrollbar classes="my-scrollbar" ref="Scrollbar" style="width: calc(100% - 200px);">
-                <!-- <User></User> -->
-                <router-view></router-view>
-            </vue-scrollbar>
-        </el-container>
-    </el-container>
+    <router-view></router-view>
 <!--     <button v-on:click="greet">{{ message }}</button>
     <h1>Name: {{ user.name }}，Age: {{ user.age }}</h1> -->
   </div>
 </template>
 
 <script>
-import VueScrollbar from 'vue2-scrollbar'
-import topBar from './components/topBar'
-import leftMenu from'./components/leftMenu'
 export default {
     name: 'app',
     components: {
-        topBar,
-        leftMenu,
-        VueScrollbar
+        
     },
     data () {
         return {
-            screenHeight: document.body.clientHeight-60,
             message: "Read Json",
             user: {
                 name: '',
                 age: ''
             },
-        }
-    },
-    mounted () {
-        document.getElementById('layout').style.height=this.screenHeight+"px";//页面初始化
-        window.onresize = () => {
-            return (() => {
-            this.screenHeight = document.body.clientHeight
-            })()
         }
     },
     methods: {
@@ -76,19 +51,5 @@ export default {
         height: 100%;
         font-family: Helvetica Neue,Helvetica,PingFang SC,Hiragino Sans GB,Microsoft YaHei,SimSun,sans-serif;
         -webkit-font-smoothing: antialiased;
-    }
-    .el-header{
-        background-color: #1385c5;
-        color: #fff;
-    }
-      
-    .el-aside {
-        background-color: #D3DCE6;
-        color: #333;
-    }
-
-    .el-main {
-        background-color: #E9EEF3;
-        color: #333;
     }
 </style>

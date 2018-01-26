@@ -11,11 +11,11 @@
             <template slot="title"><i class="el-icon-edit-outline"></i>数据录入</template>
             <el-menu-item-group title="中欧班列">
               <el-menu-item index="/DataInput/Eur_Out">去程运量统计</el-menu-item>
-              <el-menu-item index="2-2">回程运量统计</el-menu-item>
+              <el-menu-item >回程运量统计</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="中亚班列">
-              <el-menu-item index="2-3">去程运量统计</el-menu-item>
-              <el-menu-item index="2-4">回程运量统计</el-menu-item>
+              <el-menu-item >去程运量统计</el-menu-item>
+              <el-menu-item >回程运量统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="3">
