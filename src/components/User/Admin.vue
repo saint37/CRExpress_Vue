@@ -71,7 +71,7 @@
                             @size-change="pageSizeChange"  
                             @current-change="currentPageChange"  
                             :current-page="currentPage"  
-                            :page-sizes="[10, 20, 30, 50]"  
+                            :page-sizes="[3, 5, 7, 10, 30, 50]"  
                             :page-size="pageSize"  
                             layout="total, sizes, prev, pager, next, jumper"  
                             :total="total">  
@@ -138,91 +138,28 @@ export default {
         //是否显示用户列表开关
         ShowUserList: true,
         //tableData: Array(20).fill(item),
-        tableData: [{
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }, {
-            username: 'Bread',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '男',
-            mobile: ''
-        }, {
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }, {
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }, {
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }, {
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }, {
-            username: 'Saint',
-            password: '12345',
-            roleId: '1',
-            userRoleStr: '管理员',
-            orgId: '',
-            orgName: '铁科院',
-            realName: '',
-            gender: '女',
-            mobile: '15910560070'
-        }],
+        tableData:[],
+        //多选数组
+        multipleSelection: [],
         //显示加载中样式  
-        loading:false,  
+        loading:false,
         //搜索表单  
         searchForm: {  
             id: '',  
             name: ''
         },  
-        multipleSelection: [],
+        //搜索条件
+        criteria: '',
+        //请求的URL
+        url:'http://localhost:3000/list',
         //当前页  
-        currentPage:1,  
+        currentPage:1,
         //分页大小  
-        pageSize:10,  
+        pageSize:10,
+        //查询的页码
+        start: 1,  
         //总记录数  
-        total:100,  
+        total:0,
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
@@ -261,15 +198,25 @@ export default {
             return this.$store.state.user
         }
     },
+    mounted () {
+        this.loadingData(this.criteria, this.currentPage, this.pageSize);
+    },
     methods: {
         //表格重新加载数据  
-        loadingData:function() {  
-            var _self = this;  
-            _self.loading = true;  
-            setTimeout(function(){  
-                console.info("加载数据成功");  
-                _self.loading = false;  
-            },300);  
+        loadingData: function(criteria, pageNum, pageSize){
+            var _self = this;
+            _self.axios.get(_self.url, {
+                // params: {
+                //   id:1115, parameter:criteria, page:pageNum, limit:pageSize
+                // }
+              })
+              .then((response) =>{
+                _self.tableData = response.data.root;
+                _self.total = parseInt(response.data.total);
+              })
+              .catch((error)=> {
+                console.log(error);
+              }); 
         },  
         //表格编辑事件  
         editClick:function(row) {  
@@ -296,13 +243,13 @@ export default {
         addClick:function() {  
             var _self = this;  
             this.editFormVisible = true;  
-            //_self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格查询事件  
         searchClick:function() {  
             alert("查询");  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格勾选事件  
         selectionChange:function(val) {  
@@ -346,14 +293,14 @@ export default {
             console.log('每页 ' + val +' 条');  
             this.pageSize = val;  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //当前页修改事件  
         currentPageChange:function(val) {  
             this.currentPage = val;  
             console.log('当前页: ' + val);  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //保存点击事件  
         editSubmit:function(){  

@@ -27,9 +27,9 @@ export default new Router({
     {
       path: '/index',
       name: 'index',
-      meta: {
-         requireAuth: true,  
-        },    
+      // meta: {
+      //    requireAuth: true,  
+      //   },    
       component: index,
       children: [  //这里就是二级路由的配置
         {
@@ -38,9 +38,9 @@ export default new Router({
         {
           path: '/test',
           name: 'test',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: test
         },
         {
@@ -56,41 +56,41 @@ export default new Router({
         {
           path: '/User/Admin',
           name: 'Admin',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: Admin
         },
         {
           path: '/User/Common',
           name: 'Common',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: Common
         },
         {
           path: '/DataInput/Eur_Out',
           name: 'Eur_Out',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: Eur_Out
         },
         {
           path: '/DataCount/EurCount',
           name: 'EurCount',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: EurCount
         },
         {
           path: '/DataCount/AsiaCount',
           name: 'AsiaCount',
-          meta: {
-             requireAuth: true,  
-            }, 
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
           component: AsiaCount
         }
       ]

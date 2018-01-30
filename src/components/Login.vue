@@ -30,12 +30,12 @@ export default {
     },
     methods: {
         isLogin:function() {
-            this.$http.get('http://localhost:3000/users?username='+this.name+'&password='+this.pwd).then((response) => { 
-                //console.log(response.data);
+            this.axios.get('http://localhost:3000/users?username='+this.name+'&password='+this.pwd).then((response) => { 
+                console.log(response.data);
                 //这里在isLogin方法中先判断一下后台返回的是否为空值，如果不是然后提交后台返回的值。
                 //注意这里是个难点，Vuex与Vue-Resource结合使用。 
-                if(response.body != null & response.body.length > 0){ 
-                    this.$store.commit('isLogin',response.body[0]);
+                if(response.data != null & response.data.length > 0){ 
+                    this.$store.commit('isLogin',response.data[0]);
                     sessionStorage.setItem('accessToken' , 'abcde');
                     this.name=''
                     this.pwd= ''

@@ -15,5 +15,81 @@
             "username": "ccc",
             "password": "ccc"
         }
-    ]   
+    ],
+    "list":{
+        "total": "4",
+        "root": [{
+            "total": 0,
+            "page": 1,
+            "limit": 25,
+            "id": 1163,
+            "username": "linan2",
+            "password": "480e49bf2d3f6539b3551a76970b41e2",
+            "randomCode": "73I0T0LD",
+            "status": 1,
+            "roleId": 2,
+            "userRoleStr": "管理员",
+            "createDate": 1517207405263,
+            "createPersonId": 1115,
+            "orgId": 0,
+            "orgName": "总公司",
+            "realName": "李楠",
+            "gender": 0,
+            "mobile": "136110365823"
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,
+            "id": 1166,
+            "username": "linan3",
+            "password": "c32ce0fd0141b2821250bfddf7ddbd14",
+            "randomCode": "M8MJTLZE",
+            "status": 1,
+            "roleId": 2,
+            "userRoleStr": "管理员",
+            "createDate": 1517207414340,
+            "createPersonId": 1115,
+            "orgId": 0,
+            "orgName": "总公司",
+            "realName": "李楠",
+            "gender": 0,
+            "mobile": "13611036583"
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,
+            "id": 1145,
+            "username": "linan1",
+            "password": "2cdfa8037a0770fae9e9a8800b947d1b",
+            "randomCode": "J65EFDU9",
+            "status": 0,
+            "roleId": 0,
+            "userRoleStr": "管理员",
+            "createDate": 1516873940097,
+            "createPersonId": 1115,
+            "orgId": 0,
+            "orgName": "总公司",
+            "realName": "李楠",
+            "gender": 0,
+            "mobile": "13611036581"
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,
+            "id": 1121,
+            "username": "ren",
+            "password": "1e9894e23659108ce2e1d46b528e0f12",
+            "randomCode": "88TTXU85",
+            "status": 0,
+            "roleId": 0,
+            "userRoleStr": "管理员",
+            "createDate": 1516700903793,
+            "createPersonId": 1115,
+            "orgId": 0,
+            "orgName": "总公司",
+            "realName": "李楠",
+            "gender": 1,
+            "mobile": "13611036586"
+        }]
+    }
 }

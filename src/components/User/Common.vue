@@ -70,7 +70,7 @@
                             @size-change="pageSizeChange"  
                             @current-change="currentPageChange"  
                             :current-page="currentPage"  
-                            :page-sizes="[10, 20, 30, 50]"  
+                            :page-sizes="[3, 10, 20, 30, 50]"  
                             :page-size="pageSize"  
                             layout="total, sizes, prev, pager, next, jumper"  
                             :total="total">  
@@ -135,21 +135,30 @@ export default {
     return {
         CurrentUser: "Saint",
         ShowUserList: true,
-        tableData: Array(3).fill(item),
+        //表格当前页数据
+        //tableData: Array(20).fill(item),
+        tableData:[],
+        //多选数组
+        multipleSelection: [],
         //显示加载中样式  
-        loading:false,  
+        loading:false,
         //搜索表单  
         searchForm: {  
             id: '',  
             name: ''
         },  
-        multipleSelection: [],
+        //搜索条件
+        criteria: '',
+        //请求的URL
+        url:'http://localhost:3000/list',
         //当前页  
-        currentPage:1,  
+        currentPage:1,
         //分页大小  
-        pageSize:10,  
+        pageSize:10,
+        //查询的页码
+        start: 1,  
         //总记录数  
-        total:100,  
+        total:0,
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
@@ -182,16 +191,43 @@ export default {
         },  
     }
   },
+    mounted () {
+        this.loadingData(this.criteria, this.currentPage, this.pageSize);
+    },
     methods: {
         //表格重新加载数据  
-        loadingData:function() {  
-            var _self = this;  
-            _self.loading = true;  
-            setTimeout(function(){  
-                console.info("加载数据成功");  
-                _self.loading = false;  
-            },300);  
-        },  
+        // loadingData:function() {  
+        //     var _self = this;  
+        //     _self.loading = true;  
+        //     setTimeout(function(){  
+        //         console.info("加载数据成功");  
+        //         _self.loading = false;  
+        //     },300);  
+        // },  
+        // loadingData: function(criteria, pageNum, pageSize){
+        //     this.$http.get(this.url).then(function(res){
+        //     // this.$http.get(this.url,{params:{id:1115, parameter:criteria, page:pageNum, limit:pageSize}}).then(function(res){
+        //         this.tableData = res.data.root;
+        //         this.total = parseInt(res.data.total);
+        //     },function(){
+        //         console.log('failed');
+        //     });                 
+        // },
+        loadingData: function(criteria, pageNum, pageSize){
+            var _self = this;
+            _self.axios.get(_self.url, {
+                // params: {
+                //   id:1115, parameter:criteria, page:pageNum, limit:pageSize
+                // }
+              })
+              .then((response) =>{
+                _self.tableData = response.data.root;
+                _self.total = parseInt(response.data.total);
+              })
+              .catch((error)=> {
+                console.log(error);
+              });                 
+        },
         //表格编辑事件  
         editClick:function(row) {  
             this.editFormVisible = true;  
@@ -207,7 +243,7 @@ export default {
                     message: row.name + '删除成功',  
                     type: 'success'  
                 });  
-                _self.loadingData();//重新加载数据  
+                _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
@@ -217,13 +253,13 @@ export default {
         addClick:function() {  
             var _self = this;  
             this.editFormVisible = true;  
-            //_self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格查询事件  
         searchClick:function() {  
             alert("搜索");  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格勾选事件  
         selectionChange:function(val) {  
@@ -256,7 +292,7 @@ export default {
                     message: ids + '删除成功',  
                     type: 'success'  
                 });  
-                _self.loadingData();//重新加载数据  
+                _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
@@ -267,14 +303,14 @@ export default {
             console.log('每页 ' + val +' 条');  
             this.pageSize = val;  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //当前页修改事件  
         currentPageChange:function(val) {  
             this.currentPage = val;  
             console.log('当前页: ' + val);  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //保存点击事件  
         editSubmit:function(){  
@@ -282,6 +318,7 @@ export default {
         }  
     }
 }
+
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
