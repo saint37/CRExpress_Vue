@@ -44,7 +44,7 @@
                     @selection-change="selectionChange">
                     <el-table-column type="selection" width="55" align="center"></el-table-column>
                     <el-table-column prop="username" label="用户名" width="120"></el-table-column>
-                    <el-table-column prop="password" label="密码" width="120"></el-table-column>
+                    <!-- <el-table-column prop="password" label="密码" width="120"></el-table-column> -->
                     <el-table-column prop="userRoleStr" label="用户类别"></el-table-column>
                     <el-table-column prop="orgName" label="单位"></el-table-column>
                     <el-table-column prop="realName" label="真实姓名"></el-table-column>
@@ -150,7 +150,8 @@ export default {
         //搜索条件
         criteria: '',
         //请求的URL
-        url:'http://localhost:3000/list',
+        // url:'http://localhost:3000/list',
+        url:'http://10.1.167.174:8080/CRExpress/user/listUser.htm',
         //当前页  
         currentPage:1,
         //分页大小  
@@ -216,9 +217,9 @@ export default {
         loadingData: function(criteria, pageNum, pageSize){
             var _self = this;
             _self.axios.get(_self.url, {
-                // params: {
-                //   id:1115, parameter:criteria, page:pageNum, limit:pageSize
-                // }
+                params: {
+                  id:1115, parameter:criteria, page:pageNum, limit:pageSize
+                }
               })
               .then((response) =>{
                 _self.tableData = response.data.root;

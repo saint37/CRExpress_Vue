@@ -3,18 +3,17 @@
         <!--用户信息部分-->
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span v-show="user">你好，{{ user.username }}</span>
+                <span v-show="user">你好，{{ user }}</span>
             </div>
             <el-row :gutter="20">
-                <el-col :span="6">用户名：</el-col>
-                <el-col :span="6">密码：</el-col>
-                <el-col :span="6">用户类别：</el-col>
-                <el-col :span="6">单位：</el-col>
+                <el-col :span="6">用户名：{{ CurrentUser.userName }}</el-col>
+                <el-col :span="6">用户类别：{{ CurrentUser.userRoleStr }}</el-col>
+                <el-col :span="6">单位：{{ CurrentUser.orgName }}</el-col>
             </el-row>
             <el-row :gutter="20">
-                <el-col :span="6">真实姓名：</el-col>
-                <el-col :span="6">性别：</el-col>
-                <el-col :span="6">电话：</el-col>
+                <el-col :span="6">真实姓名：{{ CurrentUser.realName }}</el-col>
+                <el-col :span="6">性别：{{ CurrentUser.gender }}</el-col>
+                <el-col :span="6">电话：{{ CurrentUser.mobile }}</el-col>
             </el-row>
         </el-card>
         <el-row style="margin: 20px 0">
@@ -30,7 +29,7 @@
                     </el-form-item>
                     <el-form-item>  
                         <el-button type="primary" icon="search" @click="searchClick">查询</el-button>  
-                        <el-button type="success" icon="plus" @click="addClick">新建用户</el-button>  
+                        <el-button type="success" icon="plus" @click="addClick('createForm')">新建用户</el-button>  
                     </el-form-item>  
                 </el-form>  
             </el-row>  
@@ -45,7 +44,7 @@
                     @selection-change="selectionChange">
                     <el-table-column type="selection" width="55" align="center"></el-table-column>
                     <el-table-column prop="username" label="用户名" width="120"></el-table-column>
-                    <el-table-column prop="password" label="密码" width="120"></el-table-column>
+                    <!-- <el-table-column prop="password" label="密码" width="120"></el-table-column> -->
                     <el-table-column prop="userRoleStr" label="用户类别"></el-table-column>
                     <el-table-column prop="orgName" label="单位"></el-table-column>
                     <el-table-column prop="realName" label="真实姓名"></el-table-column>
@@ -83,7 +82,7 @@
         <el-dialog title="用户信息" :visible.sync="editFormVisible" :close-on-click-modal="false">  
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm" size="small">  
                 <el-form-item label="用户名" prop="username">  
-                    <el-input v-model="editForm.username" auto-complete="off"></el-input>  
+                    <el-input v-model="editForm.userName" auto-complete="off"></el-input>  
                 </el-form-item>   
                 <el-form-item label="密码" prop="password">  
                     <el-input v-model="editForm.password"></el-input>  
@@ -115,6 +114,42 @@
                 <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>  
             </div>  
         </el-dialog>  
+        <!--创建用户-->  
+        <el-dialog title="新建用户" :visible.sync="createFormVisible" :close-on-click-modal="false">  
+            <el-form :model="createForm" label-width="80px" :rules="editFormRules" ref="createForm" size="small">  
+                <el-form-item label="用户名" prop="username">  
+                    <el-input v-model="createForm.userName" auto-complete="off"></el-input>  
+                </el-form-item>   
+                <el-form-item label="密码" prop="password">  
+                    <el-input v-model="createForm.password"></el-input>  
+                </el-form-item>  
+                <el-form-item label="确认密码" prop="checkPass">  
+                    <el-input v-model="createForm.checkPass"></el-input>  
+                </el-form-item> 
+                <el-form-item label="用户类别" prop="userRoleStr">  
+                    <el-input v-model="createForm.userRoleStr"></el-input>  
+                </el-form-item>  
+                <el-form-item label="单位" prop="orgName">  
+                    <el-input v-model="createForm.orgName"></el-input>  
+                </el-form-item> 
+                <el-form-item label="真实姓名" prop="realName">  
+                    <el-input v-model="createForm.realName"></el-input>  
+                </el-form-item>
+                <el-form-item label="性别" prop="gender">  
+                    <el-radio-group v-model="createForm.gender">
+                      <el-radio label="男"></el-radio>
+                      <el-radio label="女"></el-radio>
+                    </el-radio-group>
+                </el-form-item>
+                <el-form-item label="电话" prop="mobile">  
+                    <el-input v-model="createForm.mobile"></el-input>  
+                </el-form-item> 
+            </el-form>  
+            <div slot="footer" class="dialog-footer">  
+                <el-button @click.native="createFormVisible = false">取消</el-button>  
+                <el-button type="primary" @click.native="addSubmit('createForm')" :loading="createLoading">新建</el-button>  
+            </div>  
+        </el-dialog>  
     </el-main>
 </template>
 
@@ -122,19 +157,20 @@
 export default {
   name: 'Admin',
   data () {
-    const item = {
-        username: 'Saint',
-        password: '12345',
-        roleId: '1',
-        userRoleStr: '管理员',
-        orgId: '',
-        orgName: '铁科院',
-        realName: '',
-        gender: '女',
-        mobile: '15910560070'
-    };
     return {
-        CurrentUser: "Saint",
+        //CurrentUser: "Saint",
+        CurrentUser : {
+            userId: '',
+            userName: '',
+            password: '',
+            roleId: '',
+            userRoleStr: '',
+            orgId: '',
+            orgName: '',
+            realName: '',
+            gender: '',
+            mobile: ''
+        },
         //是否显示用户列表开关
         ShowUserList: true,
         //tableData: Array(20).fill(item),
@@ -151,7 +187,9 @@ export default {
         //搜索条件
         criteria: '',
         //请求的URL
-        url:'http://localhost:3000/list',
+        //url:'http://localhost:3000/list',
+        url:'http://10.1.167.174:8080/CRExpress/user/listUser.htm',
+        addurl: 'http://10.1.167.174:8080/CRExpress/user/add.htm',
         //当前页  
         currentPage:1,
         //分页大小  
@@ -162,24 +200,21 @@ export default {
         total:0,
         //删除的弹出框  
         deleteVisible:false,  
-        //编辑界面是否显示  
-        editFormVisible: false,  
-        editLoading: false,  
-        editFormRules: {  
+        //编辑界面是否显示
+        createFormVisible: false,  
+        createLoading: false,  
+        createFormRules: {  
             realName: [  
                 { required: true, message: '请输入真实姓名', trigger: 'blur' }  
-            ],
-            gender: [
-                { required: true, trigger: 'blur' }
             ],
             mobile: [
                 { required: true, message: '请输入联系电话', trigger: 'blur' }
             ]
-        },  
-        //编辑界面数据  
-        editForm: {  
+        },
+        //创建用户
+        createForm: {  
             id: 0,  
-            username: '',
+            userName: '',
             password: '',
             checkPass: '',
             roleId: 0,
@@ -189,26 +224,60 @@ export default {
             realName: '',
             gender: '',
             mobile: ''
-        },  
+        }, 
+        editFormVisible: false,  
+        editLoading: false,  
+        editFormRules: {  
+            realName: [  
+                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
+            ],
+            mobile: [
+                { required: true, message: '请输入联系电话', trigger: 'blur' }
+            ]
+        },
+        //编辑用户
+        editForm: {  
+            id: 0,  
+            userName: '',
+            password: '',
+            checkPass: '',
+            roleId: 0,
+            userRoleStr: '',
+            orgId: 0,
+            orgName: '',
+            realName: '',
+            gender: '',
+            mobile: ''
+        } 
     }
   },
     computed: {
         user(){
-             //因为在main.js中已经全局注册了store，所以这里直接用this.$直接使用。
-            return this.$store.state.user
+            //因为在main.js中已经全局注册了store，所以这里直接用this.$直接使用。
+            //return this.$store.state.user
+            //发现store刷新就木有了还是用session吧
+            return sessionStorage.userName
         }
     },
     mounted () {
         this.loadingData(this.criteria, this.currentPage, this.pageSize);
+        this.loadingUser();
     },
     methods: {
+        loadingUser: function(){
+            var _self = this;
+            _self.CurrentUser.userName = sessionStorage.userName;
+            _self.CurrentUser.userRoleStr = sessionStorage.userRoleStr;
+            _self.CurrentUser.orgName = sessionStorage.orgName;
+            _self.CurrentUser.realName = sessionStorage.realName;
+        },
         //表格重新加载数据  
         loadingData: function(criteria, pageNum, pageSize){
             var _self = this;
             _self.axios.get(_self.url, {
-                // params: {
-                //   id:1115, parameter:criteria, page:pageNum, limit:pageSize
-                // }
+                params: {
+                  id:1115, parameter:criteria, page:pageNum, limit:pageSize
+                }
               })
               .then((response) =>{
                 _self.tableData = response.data.root;
@@ -240,11 +309,42 @@ export default {
             });  
         },  
         //新建事件  
-        addClick:function() {  
+        addClick:function(formName) {  
             var _self = this;  
-            this.editFormVisible = true;  
-            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
-        },  
+            _self.createFormVisible = true;  
+            if (_self.$refs[formName]!==undefined) {
+                _self.$refs[formName].resetFields();
+            }
+            _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据 
+        },    
+        addSubmit:function(formName){  
+            var _self = this;
+            _self.$refs[formName].validate((valid) => {
+              if (valid) {
+                var qs = require('qs');
+                let postData = qs.stringify(_self.createForm);
+                console.info(postData);
+                _self.axios.post(_self.addurl, postData,{
+                    headers: {
+                        'Access-Control-Allow-Origin':'*'
+                    }
+                })
+                  .then((response) =>{
+                    console.log(response);
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+        },
+        //保存点击事件  
+        editSubmit:function(){  
+            console.info(this.editForm);  
+        },
         //表格查询事件  
         searchClick:function() {  
             alert("查询");  
@@ -301,11 +401,7 @@ export default {
             console.log('当前页: ' + val);  
             var _self = this;  
             _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
-        },  
-        //保存点击事件  
-        editSubmit:function(){  
-            console.info(this.editForm);  
-        }  
+        }
     }
 }
 </script>

@@ -27,9 +27,9 @@ export default new Router({
     {
       path: '/index',
       name: 'index',
-      // meta: {
-      //    requireAuth: true,  
-      //   },    
+      meta: {
+         requireAuth: true,  
+        },    
       component: index,
       children: [  //这里就是二级路由的配置
         {
@@ -38,9 +38,9 @@ export default new Router({
         {
           path: '/test',
           name: 'test',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: test
         },
         {
