@@ -15,6 +15,7 @@ import ScrollBar from 'vue2-scrollbar'
 import 'vue2-scrollbar/dist/style/vue2-scrollbar.css'
 
 Vue.config.productionTip = false
+axios.defaults.withCredentials = true
 Vue.use(VueResource)
 Vue.use(VueRouter)
 Vue.use(ElementUI)

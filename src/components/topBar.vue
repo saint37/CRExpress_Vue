@@ -21,15 +21,16 @@ export default {
   },
   methods: {
       Logout:function() {
-          var self = this
-          this.$confirm('您确定要退出吗?', '注销用户', {
+          var _self = this;
+          _self.$confirm('您确定要退出吗?', '注销用户', {
             confirmButtonText: '确定',
             cancelButtonText: '取消'
           }).then(() => {
-            sessionStorage.clear();
-            self.$router.push({ path: '/Login' });
-          }).catch(() => {
-
+            _self.axios.post('http://10.1.167.174:8080/CRExpress/login/logout.htm')
+            .then((response) => { 
+                sessionStorage.clear();
+                _self.$router.push({ path: '/Login' });
+            })
           })
       },
       handleSelect(key, keyPath) {
