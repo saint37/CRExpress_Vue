@@ -354,6 +354,12 @@ export default {
                 _self.axios.post(_self.addurl, postData)
                   .then((response) =>{
                     console.log(response);
+                    if(response.data.success){
+                        _self.$message({  
+                            message: '添加用户成功',  
+                            type: 'success'
+                        });                         
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
@@ -386,6 +392,10 @@ export default {
                   .then((response) =>{
                     console.log(response);
                     if (response.data.success) {
+                        _self.$message({  
+                            message: '修改个人信息成功',  
+                            type: 'success'
+                        }); 
                         _self.reloadingUser();
                     }
                   })
@@ -420,6 +430,12 @@ export default {
                 _self.axios.post(_self.updatePassurl, postData)
                   .then((response) =>{
                     console.log(response);
+                    if(response.data.success){
+                        _self.$message({  
+                            message: '修改密码成功',  
+                            type: 'success'
+                        });                         
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
@@ -454,14 +470,17 @@ export default {
             }).then(function(){  
                 let qs = require('qs');
                 let postData = qs.stringify(row, {indices: false});
-                console.info(postData);
-                _self.axios.post(_self.delurl, postData)
+                console.info(row.id);
+                console.info(row.roleId);
+                _self.axios.post(_self.delurl, qs.stringify({id:row.id,roleId:row.roleId}))
                   .then((response) =>{
                     console.log(response);
-                    _self.$message({  
-                    message: row.username + '删除成功',
-                    type: 'success'  
-                    });  
+                    if(response.data.success){
+                        _self.$message({  
+                            message: row.username + '删除成功',
+                            type: 'success'  
+                        }); 
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
