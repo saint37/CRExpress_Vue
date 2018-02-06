@@ -3,8 +3,8 @@
         <!--用户信息部分-->
         <el-card class="box-card">
             <div slot="header" class="clearfix">
-                <span v-show="user">你好，{{ user }}</span>
-                <el-button style="float: right; padding: 3px 0 3px 10px;" type="text" @click="">修改密码</el-button>
+                <span>你好，{{ CurrentUser.username }}</span>
+                <el-button style="float: right; padding: 3px 0 3px 10px;" type="text" @click="changePass('pwdForm')">修改密码</el-button>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="editClick">修改个人信息</el-button>
             </div>
             <el-row :gutter="20">
@@ -80,6 +80,24 @@
                 </el-col>  
             </el-row>  
         </el-row>
+        <!--修改密码-->  
+        <el-dialog title="修改密码" :visible.sync="pwdFormVisible" :close-on-click-modal="false">  
+            <el-form :model="pwdForm" label-width="80px" :rules="pwdFormRules" ref="pwdForm" size="small">  
+                <el-form-item label="原始密码" prop="password">  
+                    <el-input v-model="pwdForm.password" auto-complete="off"></el-input>  
+                </el-form-item>   
+                <el-form-item label="新密码" prop="newPassword">  
+                    <el-input v-model="pwdForm.newPassword"></el-input>  
+                </el-form-item>
+                <el-form-item label="确认密码" prop="checkPass">  
+                    <el-input v-model="pwdForm.checkPass"></el-input>
+                </el-form-item> 
+            </el-form>  
+            <div slot="footer" class="dialog-footer">  
+                <el-button @click.native="pwdFormVisible = false">取消</el-button>  
+                <el-button type="primary" @click.native="pwdSubmit('pwdForm')" :loading="pwdLoading">提交</el-button>  
+            </div>  
+        </el-dialog>  
         <!--编辑界面-->  
         <el-dialog title="用户信息" :visible.sync="editFormVisible" :close-on-click-modal="false">  
             <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm" size="small">  
@@ -138,18 +156,47 @@
 export default {
   name: 'Admin',
   data () {
+    let validatePass = (rule, value, callback) => {
+        if (value == '') {
+          callback(new Error('请输入密码'));
+        } else if((value == this.pwdForm.password)){
+            callback(new Error('新密码不能与原密码相同'));
+        } else {
+          if (this.pwdForm.checkPass != '') {
+            this.$refs.pwdForm.validateField('checkPass');
+          }
+          callback();
+        }
+    };
+    let validatePass2 = (rule, value, callback) => {
+        if (value == '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value != this.pwdForm.newPassword) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+    };
+    let validategender = (rule, value, callback) => {
+        if (value == '') {
+          callback(new Error('请选择性别'));
+        } else if(value != 1 && value != 2){
+            callback(new Error('请选择性别'));
+        } else {
+          callback();
+        }
+    };
     return {
         //CurrentUser: "Saint",
         CurrentUser : {
-            userId: '',
+            userId: 0,
             username: '',
-            password: '',
-            roleId: '',
+            roleId: 0,
             userRoleStr: '',
-            orgId: '',
+            orgId: 0,
             orgName: '',
             realName: '',
-            gender: '',
+            gender: 0,
             mobile: ''
         },
         //是否显示用户列表开关
@@ -172,10 +219,12 @@ export default {
         url:'http://10.1.167.174:8080/CRExpress/user/listUser.htm',
         addurl: 'http://10.1.167.174:8080/CRExpress/user/add.htm',
         updateurl: 'http://10.1.167.174:8080/CRExpress/user/update.htm',
+        updatePassurl: 'http://10.1.167.174:8080/CRExpress/user/updatePassword.htm',
+        delurl: 'http://10.1.167.174:8080/CRExpress/user/delete.htm',
         //当前页  
         currentPage:1,
         //分页大小  
-        pageSize:10,
+        pageSize:5,
         //查询的页码
         start: 1,  
         //总记录数  
@@ -212,7 +261,7 @@ export default {
                 { required: true, message: '请输入真实姓名', trigger: 'blur' }  
             ],
             gender: [  
-                { required: true, message: '请选择性别', trigger: 'blur' }  
+                { required: true, validator: validategender, trigger: 'blur' }
             ],
             mobile: [
                 { required: true, message: '请输入联系电话', trigger: 'blur' }
@@ -224,16 +273,30 @@ export default {
             realName: '',
             gender: 0,
             mobile: ''
+        },
+        pwdFormVisible: false,  
+        pwdLoading: false,  
+        pwdFormRules: {  
+            password: [  
+                { required: true, message: '请输入原密码', trigger: 'blur' }  
+            ],
+            newPassword: [  
+                { required: true, validator: validatePass, trigger: 'blur' }  
+            ],
+            checkPass: [
+                { required: true, validator: validatePass2, trigger: 'blur' }
+            ]
+        },
+        //修改密码
+        pwdForm: {  
+            password: '',
+            newPassword: '',
+            checkPass: ''
         } 
     }
   },
     computed: {
-        user(){
-            //因为在main.js中已经全局注册了store，所以这里直接用this.$直接使用。
-            //return this.$store.state.user
-            //发现store刷新就木有了还是用session吧
-            return sessionStorage.username
-        }
+
     },
     mounted () {
         //this.loadingData(this.criteria, this.currentPage, this.pageSize);
@@ -246,6 +309,15 @@ export default {
             _self.CurrentUser.userRoleStr = sessionStorage.userRoleStr;
             _self.CurrentUser.orgName = sessionStorage.orgName;
             _self.CurrentUser.realName = sessionStorage.realName;
+            _self.CurrentUser.gender = sessionStorage.gender;
+            _self.CurrentUser.mobile = sessionStorage.mobile;
+        },
+        reloadingUser: function(){
+            let _self = this;
+            _self.CurrentUser.username = _self.editForm.username;
+            _self.CurrentUser.realName = _self.editForm.realName;
+            _self.CurrentUser.gender = _self.editForm.gender;
+            _self.CurrentUser.mobile = _self.editForm.mobile;
         },
         //表格重新加载数据  
         loadingData: function(criteria, pageNum, pageSize){
@@ -298,7 +370,10 @@ export default {
         editClick:function() {  
             let _self = this;
             _self.editFormVisible = true;  
-            _self.editForm = Object.assign({}, _self.CurrentUser);  
+            _self.editForm.username = _self.CurrentUser.username;
+            _self.editForm.realName = _self.CurrentUser.realName;
+            _self.editForm.gender = _self.CurrentUser.gender;
+            _self.editForm.mobile = _self.CurrentUser.mobile;
         },  
         editSubmit:function(formName){  
             let _self = this;
@@ -310,22 +385,57 @@ export default {
                 _self.axios.post(_self.updateurl, postData)
                   .then((response) =>{
                     console.log(response);
+                    if (response.data.success) {
+                        _self.reloadingUser();
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
                   }); 
-                _self.createFormVisible = false;
+                _self.editFormVisible = false;
               } else {
                 console.log('error submit!!');
                 return false;
               }
             });
-            _self.loadingUser();
+        },
+        //修改密码
+        changePass:function(formName){
+            let _self = this;
+            if (_self.$refs[formName] != undefined) {
+                _self.$refs[formName].resetFields();
+            }
+            _self.pwdFormVisible = true;  
+        },
+        pwdSubmit:function(formName){
+            let _self = this;
+            _self.$refs[formName].validate((valid) => {
+              if (valid) {
+                let qs = require('qs');
+                let postData = qs.stringify({
+                    password:_self.pwdForm.password,
+                    newPassword:_self.pwdForm.newPassword
+                });
+                console.info(postData);
+                _self.axios.post(_self.updatePassurl, postData)
+                  .then((response) =>{
+                    console.log(response);
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+                _self.pwdFormVisible = false;
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
         },
         //表格查询事件  
         searchClick:function() {  
-            alert("查询");  
             let _self = this;  
+            _self.criteria = _self.searchForm.orgName;
+            console.log("单位：" + _self.criteria);
             _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格勾选事件  
@@ -339,26 +449,25 @@ export default {
         //表格删除事件  
         deleteClick:function(row) {  
             let _self = this;  
-            this.$confirm('确认删除' + row.name +'吗?', '提示', {  
+            _self.$confirm('确认删除' + row.username +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
-                _self.$message({  
-                    message: row.name + '删除成功',  
+                let qs = require('qs');
+                let postData = qs.stringify(row, {indices: false});
+                console.info(postData);
+                _self.axios.post(_self.delurl, postData)
+                  .then((response) =>{
+                    console.log(response);
+                    _self.$message({  
+                    message: row.username + '删除成功',
                     type: 'success'  
-                });  
-                _self.loadingData();//重新加载数据  
-            }).catch(function(e){  
-                if(e != "cancel")  
-                    console.log("出现错误：" + e);  
+                    });  
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
             });  
-        },  
-        //重置密码事件  
-        resetClick:function(row) {  
-            console.info("resetRowPassword"); 
-        },  
-        //批量重置密码
-        resetPassword:function(){  
-            console.info("resetPassword");  
+            _self.loadingData(_self.criteria, _self.currentPage, _self.pageSize);//重新加载数据  
         }, 
         //删除所选，批量删除  
         removeSelection:function() {  
@@ -374,21 +483,46 @@ export default {
             let ids = "";  
             for(let i=0;i<multipleSelection.length;i++) {  
                 let row = multipleSelection[i];  
-                ids += row.name + ","  
+                ids += row.username + ","  
             }  
+            let success = 0;
             this.$confirm('确认删除' + ids +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
-                _self.$message({  
-                    message: ids + '删除成功',  
-                    type: 'success'  
-                });  
-                _self.loadingData();//重新加载数据  
+                for(let i=0;i<multipleSelection.length;i++) {  
+                    let row = multipleSelection[i];  
+                    let qs = require('qs');
+                    let postData = qs.stringify(row, {indices: false});
+                    console.info(postData);
+                    _self.axios.post(_self.delurl, postData)
+                      .then((response) =>{
+                        console.log(response); 
+                        success = 1;
+                      })
+                      .catch((error)=> {
+                        console.log(error);
+                      }); 
+                }  
+                if (success == 1) {
+                    _self.$message({  
+                        message: ids + '删除成功',  
+                        type: 'success'  
+                    });
+                    _self.loadingData(_self.criteria, _self.currentPage, _self.pageSize);//重新加载数据
+                }
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
             });  
+        },   
+        //重置密码事件  
+        resetClick:function(row) {  
+            console.info("resetRowPassword"); 
         },  
+        //批量重置密码
+        resetPassword:function(){  
+            console.info("resetPassword");  
+        }, 
         //分页大小修改事件  
         pageSizeChange:function(val) {  
             console.log('每页 ' + val +' 条');  

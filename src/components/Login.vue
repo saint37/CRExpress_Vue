@@ -67,6 +67,8 @@ export default {
                     sessionStorage.setItem('userRoleStr' , response.data.object.userRoleStr);
                     sessionStorage.setItem('orgName' , response.data.object.orgName);
                     sessionStorage.setItem('realName' , response.data.object.realName);
+                    sessionStorage.setItem('gender' , response.data.object.gender);
+                    sessionStorage.setItem('mobile' , response.data.object.mobile);
                     //console.log(response.data.object);
                     this.name=''
                     this.pwd= ''
