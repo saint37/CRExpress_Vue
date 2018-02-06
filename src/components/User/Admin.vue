@@ -91,8 +91,8 @@
                 </el-form-item>
                 <el-form-item label="性别" prop="gender">  
                     <el-radio-group v-model="editForm.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
+                      <el-radio label="1">男</el-radio>
+                      <el-radio label="2">女</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="电话" prop="mobile">  
@@ -110,15 +110,6 @@
                 <el-form-item label="用户名" prop="username">  
                     <el-input v-model="createForm.username" auto-complete="off"></el-input>  
                 </el-form-item>   
-                <el-form-item label="密码" prop="password">  
-                    <el-input v-model="createForm.password"></el-input>  
-                </el-form-item>  
-                <el-form-item label="确认密码" prop="checkPass">  
-                    <el-input v-model="createForm.checkPass"></el-input>  
-                </el-form-item> 
-                <el-form-item label="用户类别" prop="userRoleStr">  
-                    <el-input v-model="createForm.userRoleStr"></el-input>  
-                </el-form-item>  
                 <el-form-item label="单位" prop="orgName">  
                     <el-input v-model="createForm.orgName"></el-input>  
                 </el-form-item> 
@@ -127,8 +118,8 @@
                 </el-form-item>
                 <el-form-item label="性别" prop="gender">  
                     <el-radio-group v-model="createForm.gender">
-                      <el-radio label="男"></el-radio>
-                      <el-radio label="女"></el-radio>
+                      <el-radio label="1">男</el-radio>
+                      <el-radio label="2">女</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="电话" prop="mobile">  
@@ -207,16 +198,11 @@ export default {
         },
         //创建用户
         createForm: {  
-            id: 0,  
             username: '',
-            password: '',
-            checkPass: '',
-            roleId: 0,
-            userRoleStr: '',
             orgId: 0,
             orgName: '',
             realName: '',
-            gender: '',
+            gender: 0,
             mobile: ''
         }, 
         editFormVisible: false,  
@@ -236,7 +222,7 @@ export default {
         editForm: {  
             username: '',
             realName: '',
-            gender: '',
+            gender: 0,
             mobile: ''
         } 
     }
@@ -255,7 +241,7 @@ export default {
     },
     methods: {
         loadingUser: function(){
-            var _self = this;
+            let _self = this;
             _self.CurrentUser.username = sessionStorage.username;
             _self.CurrentUser.userRoleStr = sessionStorage.userRoleStr;
             _self.CurrentUser.orgName = sessionStorage.orgName;
@@ -263,13 +249,14 @@ export default {
         },
         //表格重新加载数据  
         loadingData: function(criteria, pageNum, pageSize){
-            var _self = this;
-            var qs = require('qs');
+            let _self = this;
+            let qs = require('qs');
             _self.axios.post(_self.url, qs.stringify({
                 parameter:criteria, page:pageNum, limit:pageSize
             }))
               .then((response) =>{
                 _self.tableData = response.data.root;
+                //console.log(response.data);
                 _self.total = parseInt(response.data.total);
               })
               .catch((error)=> {
@@ -278,7 +265,7 @@ export default {
         },  
         //新建事件  
         addClick:function(formName) {  
-            var _self = this;  
+            let _self = this;  
             if (_self.$refs[formName] != undefined) {
                 _self.$refs[formName].resetFields();
             }
@@ -286,13 +273,13 @@ export default {
             //_self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据 
         },    
         addSubmit:function(formName){  
-            var _self = this;
+            let _self = this;
             _self.$refs[formName].validate((valid) => {
               if (valid) {
-                var qs = require('qs');
+                let qs = require('qs');
                 let postData = qs.stringify(_self.createForm);
-                console.info(postData);
-                _self.axios.get(_self.addurl, {params:{postData}})
+                console.log(postData);
+                _self.axios.post(_self.addurl, postData)
                   .then((response) =>{
                     console.log(response);
                   })
@@ -309,15 +296,15 @@ export default {
         },
         //表格编辑事件  
         editClick:function() {  
-            var _self = this;
+            let _self = this;
             _self.editFormVisible = true;  
             _self.editForm = Object.assign({}, _self.CurrentUser);  
         },  
         editSubmit:function(formName){  
-            var _self = this;
-             _self.$refs[formName].validate((valid) => {
+            let _self = this;
+            _self.$refs[formName].validate((valid) => {
               if (valid) {
-                var qs = require('qs');
+                let qs = require('qs');
                 let postData = qs.stringify(_self.editForm);
                 console.info(postData);
                 _self.axios.post(_self.updateurl, postData)
@@ -333,24 +320,25 @@ export default {
                 return false;
               }
             });
+            _self.loadingUser();
         },
         //表格查询事件  
         searchClick:function() {  
             alert("查询");  
-            var _self = this;  
+            let _self = this;  
             _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //表格勾选事件  
         selectionChange:function(val) {  
-            for(var i=0;i<val.length;i++) {  
-                var row = val[i];  
+            for(let i=0;i<val.length;i++) {  
+                let row = val[i];  
             }  
             this.multipleSelection = val;  
             console.info(val);  
         }, 
         //表格删除事件  
         deleteClick:function(row) {  
-            var _self = this;  
+            let _self = this;  
             this.$confirm('确认删除' + row.name +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
@@ -374,8 +362,8 @@ export default {
         }, 
         //删除所选，批量删除  
         removeSelection:function() {  
-            var _self = this;  
-            var multipleSelection = this.multipleSelection;  
+            let _self = this;  
+            let multipleSelection = this.multipleSelection;  
             if(multipleSelection.length < 1) {  
                 _self.$message({  
                     message: '请至少选中一条记录',  
@@ -383,9 +371,9 @@ export default {
                 });  
                 return;  
             }  
-            var ids = "";  
-            for(var i=0;i<multipleSelection.length;i++) {  
-                var row = multipleSelection[i];  
+            let ids = "";  
+            for(let i=0;i<multipleSelection.length;i++) {  
+                let row = multipleSelection[i];  
                 ids += row.name + ","  
             }  
             this.$confirm('确认删除' + ids +'吗?', '提示', {  
@@ -405,14 +393,14 @@ export default {
         pageSizeChange:function(val) {  
             console.log('每页 ' + val +' 条');  
             this.pageSize = val;  
-            var _self = this;  
+            let _self = this;  
             _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         },  
         //当前页修改事件  
         currentPageChange:function(val) {  
             this.currentPage = val;  
             console.log('当前页: ' + val);  
-            var _self = this;  
+            let _self = this;  
             _self.loadingData(this.criteria, this.currentPage, this.pageSize);//重新加载数据  
         }
     }

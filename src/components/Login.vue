@@ -54,7 +54,7 @@ export default {
             //     }
             // }).then((error)=> this.error = error);
 
-            var qs = require('qs');
+            let qs = require('qs');
             this.axios.post('http://10.1.167.174:8080/CRExpress/login/checkLogin.htm',qs.stringify({
                 username:this.name,
                 password:this.pwd
