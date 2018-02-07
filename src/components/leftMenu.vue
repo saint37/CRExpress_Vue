@@ -3,8 +3,8 @@
         <el-menu :default-openeds="['1','2']" router>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-menu"></i>用户管理</template>
-              <el-menu-item index="/User/Admin">管理员</el-menu-item>
-              <el-menu-item index="/User/Common">普通用户</el-menu-item>
+              <el-menu-item index="/User/Common" v-if="roleId == 3">普通用户</el-menu-item>
+              <el-menu-item index="/User/Admin" v-else>管理员</el-menu-item>
               <el-menu-item index="/test">test</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
@@ -36,13 +36,21 @@ export default {
   name: 'leftMenu',
   data () {
     return {
-      activeIndex: '1'
+        activeIndex: '1',
+        roleId: 0
     }
   },
+  mounted () {
+        this.chooseMenu();
+  },
   methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      }
+        handleSelect(key, keyPath) {
+            console.log(key, keyPath);
+        },
+        chooseMenu: function(){
+            let _self = this;
+            _self.roleId = sessionStorage.roleId;
+        }
     }
 }
 </script>

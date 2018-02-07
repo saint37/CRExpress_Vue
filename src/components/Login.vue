@@ -64,7 +64,7 @@ export default {
                     this.$store.commit('isLogin',response.data.object.username);
                     sessionStorage.setItem('username' , response.data.object.username);
                     sessionStorage.setItem('userId' , response.data.object.userId);
-                    sessionStorage.setItem('userRoleStr' , response.data.object.userRoleStr);
+                    sessionStorage.setItem('roleId' , response.data.object.roleId);
                     sessionStorage.setItem('orgName' , response.data.object.orgName);
                     sessionStorage.setItem('realName' , response.data.object.realName);
                     sessionStorage.setItem('gender' , response.data.object.gender);
