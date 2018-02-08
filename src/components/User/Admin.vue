@@ -232,6 +232,7 @@ export default {
         updateurl: 'http://10.1.167.174:8080/CRExpress/user/update.htm',
         updatePassurl: 'http://10.1.167.174:8080/CRExpress/user/updatePassword.htm',
         delurl: 'http://10.1.167.174:8080/CRExpress/user/delete.htm',
+        reseturl:'http://10.1.167.174:8080/CRExpress//user/resetPassword.htm',
         //当前页  
         currentPage:1,
         //分页大小  
@@ -370,8 +371,11 @@ export default {
                             message: '添加用户成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 0
-                        });                         
+                            duration: 2000
+                        });
+                        _self.$nextTick(function(){
+                            _self.loadingData(this.criteria, this.currentPage, this.pageSize);
+                        });                        
                     }
                   })
                   .catch((error)=> {
@@ -383,7 +387,6 @@ export default {
                 return false;
               }
             });
-            _self.loadingData(this.criteria, this.currentPage, this.pageSize);
         },
         //表格编辑事件  
         editClick:function() {  
@@ -409,7 +412,7 @@ export default {
                             message: '修改个人信息成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 0
+                            duration: 2000
                         }); 
                         _self.reloadingUser();
                     }
@@ -450,7 +453,7 @@ export default {
                             message: '修改密码成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 0
+                            duration: 2000
                         });                         
                     }
                   })
@@ -495,21 +498,23 @@ export default {
                             message: row.username + '删除成功',
                             type: 'success',
                             showClose: true,
-                            duration: 0 
+                            duration: 2000 
                         }); 
+                        _self.$nextTick(function(){
+                            _self.loadingData(this.criteria, this.currentPage, this.pageSize);
+                        });
                     }
                   })
                   .catch((error)=> {
                     console.log(error);
                   }); 
             });  
-            _self.loadingData(_self.criteria, _self.currentPage, _self.pageSize);//重新加载数据  
         }, 
         //删除所选，批量删除  
         removeSelection:function() {  
             let _self = this;  
             let multipleSelection = this.multipleSelection;  
-            if(multipleSelection.length < 1) {  
+            if(multipleSelection.length < 1) {
                 _self.$message({  
                     message: '请至少选中一条记录',  
                     type: 'error'  
@@ -521,44 +526,99 @@ export default {
                 let row = multipleSelection[i];  
                 ids += row.username + ","  
             }  
-            let success = 0;
             this.$confirm('确认删除' + ids +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
                 for(let i=0;i<multipleSelection.length;i++) {  
                     let row = multipleSelection[i];  
                     let qs = require('qs');
-                    // let postData = qs.stringify(row, {indices: false});
                     _self.axios.post(_self.delurl, qs.stringify({id:row.id,roleId:row.roleId}))
                       .then((response) =>{
                         console.log(response); 
-                        success = 1;
+                        if(response.data.success){
+                            _self.$message({  
+                                message: ids + '删除成功',
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000 
+                            }); 
+                        }
                       })
                       .catch((error)=> {
-                        console.log(error);
+                        console.log("error:"+error);
                       }); 
                 }  
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
             });
-            if (success == 1) {
-                _self.$message({  
-                    message: ids + '删除成功',  
-                    type: 'success',
-                    showClose: true,
-                    duration: 0
-                });
-                _self.loadingData(_self.criteria, _self.currentPage, _self.pageSize);//重新加载数据
-            }
         },   
         //重置密码事件  
         resetClick:function(row) {  
-            console.info("resetRowPassword"); 
+            let _self = this;  
+            _self.$confirm('确认重置' + row.username +'的密码吗?', '提示', {  
+                type: 'warning'  
+            }).then(function(){  
+                let qs = require('qs');
+                _self.axios.post(_self.reseturl, qs.stringify({id:row.id,username:row.username}))
+                  .then((response) =>{
+                    console.log(response);
+                    if(response.data.success){
+                        _self.$message({  
+                            message: row.username + '重置密码成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000 
+                        }); 
+                    }
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+            });  
         },  
         //批量重置密码
         resetPassword:function(){  
-            console.info("resetPassword");  
+            let _self = this;  
+            let multipleSelection = this.multipleSelection;  
+            if(multipleSelection.length < 1) {
+                _self.$message({  
+                    message: '请至少选中一条记录',  
+                    type: 'error'  
+                });  
+                return;  
+            }  
+            let ids = "";  
+            for(let i=0;i<multipleSelection.length;i++) {  
+                let row = multipleSelection[i];  
+                ids += row.username + ","  
+            }  
+            this.$confirm('确认重置' + ids +'的密码吗?', '提示', {  
+                type: 'warning'  
+            }).then(function(){  
+                for(let i=0;i<multipleSelection.length;i++) {  
+                    let row = multipleSelection[i];  
+                    let qs = require('qs');
+                    _self.axios.post(_self.reseturl, qs.stringify({id:row.id,username:row.username}))
+                      .then((response) =>{
+                        console.log(response); 
+                        if(response.data.success){
+                            _self.$message({  
+                                message: ids + '重置密码成功',
+                                type: 'success',
+                                showClose: true,
+                                duration: 2000 
+                            }); 
+                        }
+                      })
+                      .catch((error)=> {
+                        console.log("error:"+error);
+                      }); 
+                }  
+            }).catch(function(e){  
+                if(e != "cancel")  
+                    console.log("出现错误：" + e);  
+            }); 
         }, 
         //分页大小修改事件  
         pageSizeChange:function(val) {  

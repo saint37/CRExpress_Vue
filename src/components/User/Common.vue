@@ -26,13 +26,13 @@
         <el-dialog title="修改密码" :visible.sync="pwdFormVisible" :close-on-click-modal="false">  
             <el-form :model="pwdForm" label-width="80px" :rules="pwdFormRules" ref="pwdForm" size="small">  
                 <el-form-item label="原始密码" prop="password">  
-                    <el-input v-model="pwdForm.password" auto-complete="off"></el-input>  
+                    <el-input v-model="pwdForm.password" auto-complete="off" type="password"></el-input>  
                 </el-form-item>   
                 <el-form-item label="新密码" prop="newPassword">  
-                    <el-input v-model="pwdForm.newPassword"></el-input>  
+                    <el-input v-model="pwdForm.newPassword" type="password"></el-input>  
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass">  
-                    <el-input v-model="pwdForm.checkPass"></el-input>
+                    <el-input v-model="pwdForm.checkPass" type="password"></el-input>
                 </el-form-item> 
             </el-form>  
             <div slot="footer" class="dialog-footer">  
@@ -214,7 +214,7 @@ export default {
                             message: '修改个人信息成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 0
+                            duration: 2000
                         }); 
                         _self.reloadingUser();
                     }
@@ -255,7 +255,7 @@ export default {
                             message: '修改密码成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 0
+                            duration: 2000
                         });                         
                     }
                   })
