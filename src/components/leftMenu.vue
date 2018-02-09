@@ -1,6 +1,6 @@
 <template>
     <el-aside width="200px" style="background-color: rgb(238, 241, 246)">
-        <el-menu :default-openeds="['1','2']" router>
+        <el-menu :default-openeds="['1','2','3']" router>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-menu"></i>用户管理</template>
               <el-menu-item index="/User/Common" v-if="roleId == 3">普通用户</el-menu-item>
@@ -21,10 +21,12 @@
           <el-submenu index="3">
             <template slot="title"><i class="el-icon-document"></i>数据统计</template>
             <el-menu-item-group title="中欧班列">
-              <el-menu-item index="/DataCount/EurCount">运量统计</el-menu-item>
+              <el-menu-item index="/DataCount/EurCount_Out">去程运量统计</el-menu-item>
+              <el-menu-item index="/DataCount/EurCount_In">回程运量统计</el-menu-item>
             </el-menu-item-group>
             <el-menu-item-group title="中亚班列">
-              <el-menu-item index="/DataCount/AsiaCount">运量统计</el-menu-item>
+              <el-menu-item index="/DataCount/AsiaCount_Out">去程运量统计</el-menu-item>
+              <el-menu-item index="/DataCount/AsiaCount_In">回程运量统计</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
         </el-menu>

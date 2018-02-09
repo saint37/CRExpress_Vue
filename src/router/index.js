@@ -8,8 +8,8 @@ import leftMenu from'@/components/leftMenu'
 import Admin from'@/components/User/Admin'
 import Common from'@/components/User/Common'
 import Eur_Out from'@/components/DataInput/Eur_Out'
-import EurCount from'@/components/DataCount/EurCount'
-import AsiaCount from'@/components/DataCount/AsiaCount'
+import EurCount_Out from'@/components/DataCount/EurCount_Out'
+import AsiaCount_Out from'@/components/DataCount/AsiaCount_Out'
 
 Vue.use(Router)
 
@@ -78,20 +78,20 @@ export default new Router({
           component: Eur_Out
         },
         {
-          path: '/DataCount/EurCount',
-          name: 'EurCount',
+          path: '/DataCount/EurCount_Out',
+          name: 'EurCount_Out',
           // meta: {
           //    requireAuth: true,  
           //   }, 
-          component: EurCount
+          component: EurCount_Out
         },
         {
-          path: '/DataCount/AsiaCount',
-          name: 'AsiaCount',
+          path: '/DataCount/AsiaCount_Out',
+          name: 'AsiaCount_Out',
           // meta: {
           //    requireAuth: true,  
           //   }, 
-          component: AsiaCount
+          component: AsiaCount_Out
         }
       ]
     },

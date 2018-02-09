@@ -3,12 +3,12 @@
         <!--列表顶部搜索和工具条-->
         <el-row>  
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">  
-                <el-form-item>
+<!--                 <el-form-item>
                     <el-select v-model="searchForm.type" placeholder="去程/回程">
                       <el-option label="去程" value="beijing"></el-option>
                       <el-option label="回程" value="taiyuan"></el-option>
                     </el-select>
-                </el-form-item>
+                </el-form-item> -->
                 <el-form-item>
                     <el-select v-model="searchForm.org" placeholder="铁路局">
                       <el-option label="北京局" value="beijing"></el-option>
@@ -31,7 +31,7 @@
         </el-row>  
         <el-row>
             <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列运量统计表</h1></el-form-item>
+                <el-form-item><h1>中亚班列运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
                     <el-input v-model="saveForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
@@ -228,7 +228,7 @@
 <script>
 // import VueScrollbar from 'vue2-scrollbar'
 export default {
-  name: 'EurCount',
+  name: 'AsiaCount_Out',
   // components: {
   //       VueScrollbar
   //   },

@@ -517,10 +517,12 @@ export default {
             if(multipleSelection.length < 1) {
                 _self.$message({  
                     message: '请至少选中一条记录',  
-                    type: 'error'  
+                    type: 'error',
+                    duration: 2000 
                 });  
                 return;  
             }  
+            let success = 0;
             let ids = "";  
             for(let i=0;i<multipleSelection.length;i++) {  
                 let row = multipleSelection[i];  
@@ -532,22 +534,33 @@ export default {
                 for(let i=0;i<multipleSelection.length;i++) {  
                     let row = multipleSelection[i];  
                     let qs = require('qs');
+                    success = 0;
                     _self.axios.post(_self.delurl, qs.stringify({id:row.id,roleId:row.roleId}))
                       .then((response) =>{
                         console.log(response); 
                         if(response.data.success){
-                            _self.$message({  
-                                message: ids + '删除成功',
-                                type: 'success',
-                                showClose: true,
-                                duration: 2000 
-                            }); 
+                            success = 1;
                         }
                       })
                       .catch((error)=> {
                         console.log("error:"+error);
                       }); 
                 }  
+                _self.loading = true;  
+                setTimeout(function(){  
+                    if(success == 1){
+                        _self.$message({  
+                            message: ids + '删除成功',
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000 
+                        }); 
+                        _self.$nextTick(function(){
+                            _self.loadingData(this.criteria, this.currentPage, this.pageSize);
+                        });                        
+                    }
+                    _self.loading = false;  
+                },300);  
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
