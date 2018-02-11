@@ -39,7 +39,7 @@
         </el-row>  
         <el-row>
             <el-form :inline="true" :model="exportForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
+                <el-form-item><h1>中欧班列回程运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
                     <el-input v-model="exportForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
@@ -133,7 +133,7 @@ export default {
         loading:false,  
         //搜索表单  
         exportForm: { 
-            formType: 'formGo', //formBack, formGo 
+            formType: 'formBack', //formBack, formGo 
             trainType: 1, //1Eur,2Asia
             orgID: 19, 
             orgName: '',  

@@ -10,6 +10,8 @@ import Common from'@/components/User/Common'
 import Eur_Out from'@/components/DataInput/Eur_Out'
 import EurCount_Out from'@/components/DataCount/EurCount_Out'
 import AsiaCount_Out from'@/components/DataCount/AsiaCount_Out'
+import EurCount_In from'@/components/DataCount/EurCount_In'
+import AsiaCount_In from'@/components/DataCount/AsiaCount_In'
 
 Vue.use(Router)
 
@@ -92,6 +94,22 @@ export default new Router({
           //    requireAuth: true,  
           //   }, 
           component: AsiaCount_Out
+        },
+        {
+          path: '/DataCount/EurCount_In',
+          name: 'EurCount_In',
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
+          component: EurCount_In
+        },
+        {
+          path: '/DataCount/AsiaCount_In',
+          name: 'AsiaCount_In',
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
+          component: AsiaCount_In
         }
       ]
     },

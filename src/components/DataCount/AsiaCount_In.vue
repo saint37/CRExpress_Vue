@@ -39,7 +39,7 @@
         </el-row>  
         <el-row>
             <el-form :inline="true" :model="exportForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
+                <el-form-item><h1>中亚班列回程运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
                     <el-input v-model="exportForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
@@ -124,7 +124,7 @@
 
 <script>
 export default {
-  name: 'EurCount_Out',
+  name: 'AsiaCount_Out',
   data () {
     return {
         orgs:[{"id":19,"flag":1,"upperUnitId":0,"orgStr":"中国铁路总公司"},{"id":1,"flag":2,"upperUnitId":19,"orgStr":"哈尔滨铁路局"},{"id":2,"flag":2,"upperUnitId":19,"orgStr":"沈阳铁路局"},{"id":3,"flag":2,"upperUnitId":19,"orgStr":"北京铁路局"},{"id":4,"flag":2,"upperUnitId":19,"orgStr":"太原铁路局"},{"id":5,"flag":2,"upperUnitId":19,"orgStr":"呼和浩特铁路局"},{"id":6,"flag":2,"upperUnitId":19,"orgStr":"郑州铁路局"},{"id":7,"flag":2,"upperUnitId":19,"orgStr":"武汉铁路局"},{"id":8,"flag":2,"upperUnitId":19,"orgStr":"西安铁路局"},{"id":9,"flag":2,"upperUnitId":19,"orgStr":"济南铁路局"},{"id":10,"flag":2,"upperUnitId":19,"orgStr":"上海铁路局"},{"id":11,"flag":2,"upperUnitId":19,"orgStr":"南昌铁路局"},{"id":12,"flag":2,"upperUnitId":19,"orgStr":"广州铁路（集团）公司"},{"id":13,"flag":2,"upperUnitId":19,"orgStr":"南宁铁路局"},{"id":14,"flag":2,"upperUnitId":19,"orgStr":"成都铁路局"},{"id":15,"flag":2,"upperUnitId":19,"orgStr":"昆明铁路局"},{"id":16,"flag":2,"upperUnitId":19,"orgStr":"兰州铁路局"},{"id":17,"flag":2,"upperUnitId":19,"orgStr":"乌鲁木齐铁路局"},{"id":18,"flag":2,"upperUnitId":19,"orgStr":"青藏铁路公司"}],
@@ -133,8 +133,8 @@ export default {
         loading:false,  
         //搜索表单  
         exportForm: { 
-            formType: 'formGo', //formBack, formGo 
-            trainType: 1, //1Eur,2Asia
+            formType: 'formBack', //formBack, formGo 
+            trainType: 2, //1Eur,2Asia
             orgID: 19, 
             orgName: '',  
             departDateBegin:new Date(),
