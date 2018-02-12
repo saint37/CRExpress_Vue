@@ -6,6 +6,7 @@ import test from'@/components/test'
 import topBar from '@/components/topBar'
 import leftMenu from'@/components/leftMenu'
 import Admin from'@/components/User/Admin'
+import TopAdmin from'@/components/User/TopAdmin'
 import Common from'@/components/User/Common'
 import Eur_Out from'@/components/DataInput/Eur_Out'
 import EurCount_Out from'@/components/DataCount/EurCount_Out'
@@ -62,6 +63,14 @@ export default new Router({
           //    requireAuth: true,  
           //   }, 
           component: Admin
+        },
+        {
+          path: '/User/TopAdmin',
+          name: 'TopAdmin',
+          // meta: {
+          //    requireAuth: true,  
+          //   }, 
+          component: TopAdmin
         },
         {
           path: '/User/Common',

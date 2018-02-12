@@ -4,7 +4,7 @@
             <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
                 <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
-                    <el-input v-model="saveForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
+                    <el-input v-model="searchForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
                 <el-form-item label="填表人">  
                     <el-input v-model="saveForm.realName" :disabled="true" size="mini" placeholder="填表人"></el-input>  
@@ -21,20 +21,33 @@
                 <el-form-item>
                     <el-select v-model="searchForm.status" placeholder="全部">
                       <el-option label="全部" value="all"></el-option>
-                      <el-option label="未提交" value="submit"></el-option>
+                      <el-option label="未提交" value="unsubmit"></el-option>
+                      <el-option label="已提交" value="submit"></el-option>
                     </el-select>
                 </el-form-item>
-                <el-form-item style="width: 300px">  
+                <el-form-item style="width: 350px">  
                     <el-col :span="11">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date1" style="width: 100%"></el-date-picker>
+                        <el-date-picker
+                          v-model="searchForm.departDateBegin"
+                          type="date"
+                          placeholder="选择日期"
+                          :picker-options="pickerOptions0"
+                          style="width: 100%">
+                        </el-date-picker>
                     </el-col>
                     <el-col class="line" :span="2">-</el-col>
                     <el-col :span="11">
-                      <el-date-picker type="date" placeholder="选择日期" v-model="searchForm.date2" style="width: 100%"></el-date-picker>
+                        <el-date-picker
+                          v-model="searchForm.departDateEnd"
+                          type="date"
+                          placeholder="选择日期"
+                          :picker-options="pickerOptions1"
+                          style="width: 100%">
+                        </el-date-picker>
                     </el-col>
-                </el-form-item> 
+                </el-form-item>
                 <el-form-item>  
-                    <el-button type="primary" icon="edit" @click="searchClick">筛选</el-button>
+                    <el-button type="primary" icon="edit" @click="searchClick">查询</el-button>
                     <el-button type="success" icon="edit" @click="addClick">新增</el-button>
                 </el-form-item>  
             </el-form>  
@@ -55,36 +68,35 @@
                         <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button>  
                     </template>  
                 </el-table-column>  
-                <el-table-column prop="id" label="序号"></el-table-column>
-                <el-table-column prop="station" label="发站"></el-table-column>
-                <el-table-column prop="name" label="发车车次"></el-table-column>
-                <el-table-column prop="name" label="发车日期"></el-table-column>
-                <el-table-column prop="name" label="出境口岸站"></el-table-column>
-                <el-table-column prop="name" label="境外到站"></el-table-column>
-                <el-table-column prop="name" label="境外到站所属国家"></el-table-column>
-                <el-table-column prop="name" label="境外到站所属城市"></el-table-column>
-                <el-table-column prop="name" label="列数"></el-table-column>
-                <el-table-column prop="name" label="车数"></el-table-column>
-                <el-table-column prop="name" label="箱数">
-                    <el-table-column prop="name" label="20英尺（只）">
-                        <el-table-column prop="name" label="重箱"></el-table-column>
-                        <el-table-column prop="name" label="空箱"></el-table-column>
+                <el-table-column prop="fromStation" label="发站"></el-table-column>
+                <el-table-column prop="trainNumber" label="发车车次"></el-table-column>
+                <el-table-column prop="departDate" label="发车日期"></el-table-column>
+                <el-table-column prop="exitportStation" label="出境口岸站"></el-table-column>
+                <el-table-column prop="overseasStation" label="境外到站"></el-table-column>
+                <el-table-column prop="overseasCountry" label="境外到站所属国家"></el-table-column>
+                <el-table-column prop="overseasCity" label="境外到站所属城市"></el-table-column>
+                <el-table-column prop="trainQty" label="列数"></el-table-column>
+                <el-table-column prop="carriageQty" label="车数"></el-table-column>
+                <el-table-column prop="" label="箱数">
+                    <el-table-column prop="" label="20英尺（只）">
+                        <el-table-column prop="heavyQtyTwenty" label="重箱"></el-table-column>
+                        <el-table-column prop="emptyQtyTwenty" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="name" label="40英尺（只）">
-                        <el-table-column prop="name" label="重箱"></el-table-column>
-                        <el-table-column prop="name" label="空箱"></el-table-column>
+                    <el-table-column prop="" label="40英尺（只）">
+                        <el-table-column prop="heavyQtyForty" label="重箱"></el-table-column>
+                        <el-table-column prop="emptyQtyForty" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="name" label="45英尺（只）">
-                        <el-table-column prop="name" label="重箱"></el-table-column>
-                        <el-table-column prop="name" label="空箱"></el-table-column>
+                    <el-table-column prop="" label="45英尺（只）">
+                        <el-table-column prop="heavyQtyFortyfive" label="重箱"></el-table-column>
+                        <el-table-column prop="emptyQtyFortyfive" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="name" label="折合TEU"></el-table-column>
+                    <el-table-column prop="teu" label="折合TEU"></el-table-column>
                 </el-table-column>
-                <el-table-column prop="name" label="其中冷藏箱">
-                    <el-table-column prop="name" label="TEU"></el-table-column>
-                    <el-table-column prop="name" label="吨"></el-table-column>
+                <el-table-column prop="" label="其中冷藏箱">
+                    <el-table-column prop="coldTEU" label="TEU"></el-table-column>
+                    <el-table-column prop="coldWeight" label="吨"></el-table-column>
                 </el-table-column>
-                <el-table-column prop="notes" label="备注"></el-table-column>
+                <el-table-column prop="remark" label="备注"></el-table-column>
             </el-table>
         </el-row>     
 
@@ -123,14 +135,14 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="发车日期">  
-                            <el-date-picker type="date" placeholder="选择日期" v-model="editForm.fromDate" style="width: 150px;"></el-date-picker>  
+                            <el-date-picker type="date" placeholder="选择日期" v-model="editForm.departDate" style="width: 150px;"></el-date-picker>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="出境口岸站">  
-                            <el-input v-model="editForm.exitPortStation" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.exitportStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
@@ -164,43 +176,43 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="20尺重箱数">  
-                            <el-input v-model="editForm.twHeavyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.heavyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="20尺空箱数">  
-                            <el-input v-model="editForm.twEmptyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.emptyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="40尺重箱数">  
-                            <el-input v-model="editForm.ftHeavyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.heavyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="40尺空箱数">  
-                            <el-input v-model="editForm.ftEmptyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.emptyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="45尺重箱数">  
-                            <el-input v-model="editForm.ffHeavyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.heavyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="45尺空箱数">  
-                            <el-input v-model="editForm.ffEmptyQty" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.emptyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="折合TEU">  
-                            <el-input v-model="editForm.TEU" auto-complete="off"></el-input>  
+                            <el-input v-model="editForm.teu" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
@@ -238,31 +250,9 @@ export default {
   //       VueScrollbar
   //   },
   data () {
-    const item = {
-        date: '2018-01-16',
-        name: 'ST',
-        address: '北京市海淀区大柳树路2号'
-    };
     return {
-        Org: '**某**',
         //tableData: Array(20).fill(item),
-        tableData: [{
-          station: '义乌',
-          name: 'ST',
-          notes: '备注'
-        }, {
-          station: '义乌',
-          name: 'ST',
-          notes: '备注'
-        }, {
-          station: '义乌',
-          name: 'ST',
-          notes: '备注'
-        }, {
-          station: '义乌',
-          name: 'ST',
-          notes: '备注'
-        }],
+        tableData: [],
         //显示加载中样式  
         loading:false,  
         //搜索表单  
@@ -273,9 +263,13 @@ export default {
         },  
         //搜索表单  
         searchForm: {  
-            status: '',  
-            date1: '',
-            date2: ''
+            formType: 'formGo',
+            trainType: 1,
+            status: 1,  
+            departDateBegin: '',
+            departDateEnd: '',
+            orgID:'',
+            orgName:'',
         },  
         multipleSelection: [],
         //当前页  
@@ -284,6 +278,9 @@ export default {
         pageSize:10,  
         //总记录数  
         total:100,  
+        //请求的URL
+        url:'http://10.1.167.190:8080/CREpress/business/list.htm',
+        addurl:'http://10.1.167.174:8080/CRExpress/export/out.htm',
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
@@ -299,40 +296,86 @@ export default {
             id: 0,  
             fromStation: '',  
             trainNumber: '',  
-            fromDate: '', 
-            exitPortStation: '', 
+            departDate: '', 
+            exitportStation: '', 
             overseasStation: '',
             overseasCountry: '',
             overseasCity: '',
             trainQty: '',
             carriageQty: '',
-            twHeavyQty: '',
-            twEmptyQty: '',
-            ftHeavyQty: '',
-            ftEmptyQty: '',
-            ffHeavyQty: '',
-            ffEmptyQty: '',
-            TEU: '',
+            heavyQtyTwenty: '',
+            emptyQtyTwenty: '',
+            heavyQtyForty: '',
+            emptyQtyForty: '',
+            heavyQtyFortyfive: '',
+            emptyQtyFortyfive: '',
+            teu: '',
             coldTEU: '',
             coldWeight: '',
-            remark: ''  
+            remark: ''
         },  
+        pickerOptions0: {
+          disabledDate:(time) => {
+            return time.getTime() > this.searchForm.departDateEnd;
+          }
+        },
+        pickerOptions1: {
+          disabledDate:(time) => {
+            return time.getTime() < this.searchForm.departDateBegin;
+          }
+        },
     }
   },
+    mounted () {
+        this.searchForm.orgID = sessionStorage.orgId;
+        this.searchForm.orgName = sessionStorage.orgName;
+    },
     methods: {
         //表格重新加载数据  
-        loadingData:function() {  
+        loadingData:function(status, DateBegin, DateEnd, pageNum, pageSize) {
+            let _self = this;  
+            let qs = require('qs');
+            if(DateBegin & DateEnd) {
+                let Date1 = DateBegin.getFullYear() + '-' + (DateBegin.getMonth() + 1) + '-' + DateBegin.getDate();  
+                let Date2 = DateEnd.getFullYear() + '-' + (DateEnd.getMonth() + 1) + '-' + DateEnd.getDate();
+                let postData = qs.stringify({
+                    formType:_self.searchForm.formType, trainType:_self.searchForm.trainType,
+                    orgID:_self.searchForm.orgID, status:_self.searchForm.status,
+                    departDateBegin:Date1,departDateEnd:Date2, page:pageNum, limit:pageSize
+                });
+                console.log(postData);
+                _self.axios.post(_self.url, postData)
+                  .then((response) =>{
+                    _self.tableData = response.data.root;
+                    console.log(response.data);
+                    _self.total = parseInt(response.data.total);
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  });
+            }else{
+                _self.$message({  
+                    message: '请选择日期',  
+                    type: 'error',
+                    showClose: true,
+                    duration: 2000
+                });
+            }
+        },  
+        //表格保存事件  
+        searchClick:function() {  
+            alert("搜索");  
             var _self = this;  
-            _self.loading = true;  
-            setTimeout(function(){  
-                console.info("加载数据成功");  
-                _self.loading = false;  
-            },300);  
+            _self.loadingData();//重新加载数据  
         },  
         //表格编辑事件  
         editClick:function(row) {  
             this.editFormVisible = true;  
             this.editForm = Object.assign({}, row);  
+        },  
+        //保存点击事件  
+        editSubmit:function(){  
+            console.info(this.editForm);  
         },  
         //表格删除事件  
         deleteClick:function(row) {  
@@ -355,12 +398,6 @@ export default {
             var _self = this;  
             this.editFormVisible = true;  
             //_self.loadingData();//重新加载数据  
-        },  
-        //表格保存事件  
-        searchClick:function() {  
-            alert("搜索");  
-            var _self = this;  
-            _self.loadingData();//重新加载数据  
         },  
         //表格提交事件  
         submitSelection:function() {  
@@ -419,10 +456,6 @@ export default {
             var _self = this;  
             _self.loadingData();//重新加载数据  
         },  
-        //保存点击事件  
-        editSubmit:function(){  
-            console.info(this.editForm);  
-        }  
     }
 }
 </script>

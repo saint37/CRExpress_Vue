@@ -66,6 +66,7 @@ export default {
                     sessionStorage.setItem('userId' , response.data.object.userId);
                     sessionStorage.setItem('roleId' , response.data.object.roleId);
                     sessionStorage.setItem('orgName' , response.data.object.orgName);
+                    sessionStorage.setItem('orgId' , response.data.object.orgId);
                     sessionStorage.setItem('realName' , response.data.object.realName);
                     sessionStorage.setItem('gender' , response.data.object.gender);
                     sessionStorage.setItem('mobile' , response.data.object.mobile);

@@ -138,6 +138,11 @@
                 <el-form-item label="用户名" prop="username">  
                     <el-input v-model="createForm.username" auto-complete="off"></el-input>  
                 </el-form-item>   
+                <el-form-item label="单位" prop="orgId">
+                    <el-select v-model="createForm.orgId" placeholder="铁路局">
+                      <el-option v-for="item in orgs" :label="item.orgStr" :value="item.id"></el-option>
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="真实姓名" prop="realName">  
                     <el-input v-model="createForm.realName"></el-input>  
                 </el-form-item>
@@ -194,7 +199,7 @@ export default {
         }
     };
     return {
-        //CurrentUser: "Saint",
+        orgs:[{"id":19,"flag":1,"upperUnitId":0,"orgStr":"中国铁路总公司"},{"id":1,"flag":2,"upperUnitId":19,"orgStr":"哈尔滨铁路局"},{"id":2,"flag":2,"upperUnitId":19,"orgStr":"沈阳铁路局"},{"id":3,"flag":2,"upperUnitId":19,"orgStr":"北京铁路局"},{"id":4,"flag":2,"upperUnitId":19,"orgStr":"太原铁路局"},{"id":5,"flag":2,"upperUnitId":19,"orgStr":"呼和浩特铁路局"},{"id":6,"flag":2,"upperUnitId":19,"orgStr":"郑州铁路局"},{"id":7,"flag":2,"upperUnitId":19,"orgStr":"武汉铁路局"},{"id":8,"flag":2,"upperUnitId":19,"orgStr":"西安铁路局"},{"id":9,"flag":2,"upperUnitId":19,"orgStr":"济南铁路局"},{"id":10,"flag":2,"upperUnitId":19,"orgStr":"上海铁路局"},{"id":11,"flag":2,"upperUnitId":19,"orgStr":"南昌铁路局"},{"id":12,"flag":2,"upperUnitId":19,"orgStr":"广州铁路（集团）公司"},{"id":13,"flag":2,"upperUnitId":19,"orgStr":"南宁铁路局"},{"id":14,"flag":2,"upperUnitId":19,"orgStr":"成都铁路局"},{"id":15,"flag":2,"upperUnitId":19,"orgStr":"昆明铁路局"},{"id":16,"flag":2,"upperUnitId":19,"orgStr":"兰州铁路局"},{"id":17,"flag":2,"upperUnitId":19,"orgStr":"乌鲁木齐铁路局"},{"id":18,"flag":2,"upperUnitId":19,"orgStr":"青藏铁路公司"}],
         CurrentUser : {
             userId: 0,
             username: '',
@@ -257,7 +262,7 @@ export default {
         //创建用户
         createForm: {  
             username: '',
-            orgId: 0,
+            orgId: 19,
             orgName: '',
             realName: '',
             gender: 0,
@@ -308,8 +313,6 @@ export default {
 
     },
     mounted () {
-        this.createForm.orgId = sessionStorage.orgId;
-        this.createForm.orgName = sessionStorage.orgName;
         this.loadingData(this.criteria, this.currentPage, this.pageSize);
         this.loadingUser();
     },
@@ -339,7 +342,7 @@ export default {
             }))
               .then((response) =>{
                 _self.tableData = response.data.root;
-                //console.log(response.data.root);
+                console.log(response.data.root);
                 _self.total = parseInt(response.data.total);
               })
               .catch((error)=> {
