@@ -56,13 +56,15 @@
                 :data="tableData"
                 v-loading.body="loading" 
                 tooltip-effect="dark"
+                :row-class-name="tableRowClassName"
                 @selection-change="selectionChange">
                 <el-table-column type="selection" width="55" align="center">
                 </el-table-column>
                 <el-table-column label="操作">  
                     <template scope="scope">  
-                        <div v-if="scope.row.status == 1">
-                            <el-button type="primary" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
+                        <div v-if="scope.row.status == 1" style="width: 80px;">
+                            <el-button type="primary" class="mybtn" size="mini" icon="submit" @click="submitClick(scope.row)"><i class="el-icon-upload"></i></el-button> 
+                            <el-button type="success" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
                             <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button> 
                         </div>
                         <div v-else></div>
@@ -77,7 +79,7 @@
                 <el-table-column prop="fromStation" label="发站"></el-table-column>
                 <el-table-column prop="trainNumber" label="发车车次"></el-table-column>
                 <el-table-column prop="departDate" label="发车日期"></el-table-column>
-                <el-table-column prop="exitportStation" label="出境口岸站"></el-table-column>
+                <el-table-column prop="exitPortStation" label="出境口岸站"></el-table-column>
                 <el-table-column prop="overseasStation" label="境外到站"></el-table-column>
                 <el-table-column prop="overseasCountry" label="境外到站所属国家"></el-table-column>
                 <el-table-column prop="overseasCity" label="境外到站所属城市"></el-table-column>
@@ -147,8 +149,8 @@
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="出境口岸站" prop="exitportStation">  
-                            <el-input v-model="editForm.exitportStation" auto-complete="off"></el-input>  
+                        <el-form-item label="出境口岸站" prop="exitPortStation">  
+                            <el-input v-model="editForm.exitPortStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
@@ -242,7 +244,8 @@
             </el-form>  
             <div slot="footer" class="dialog-footer">  
                 <el-button @click.native="editFormVisible = false">取消</el-button>  
-                <el-button type="primary" @click.native="editSubmit('editForm')" :loading="editLoading">保存</el-button>  
+                <el-button v-if="addclickflag == 1" type="primary" @click.native="addSubmit('editForm')" :loading="editLoading">新建</el-button>  
+                <el-button v-else type="primary" @click.native="editSubmit('editForm')" :loading="editLoading">保存</el-button>  
             </div>  
         </el-dialog>  
     </el-main>
@@ -258,6 +261,7 @@ export default {
   data () {
     return {
         //tableData: Array(20).fill(item),
+        addclickflag:0,
         tableData: [],
         //显示加载中样式  
         loading:false,  
@@ -298,6 +302,9 @@ export default {
         testurl:'http://10.1.167.188:3000/train',
         url:'http://10.1.167.190:8080/CREpress/saveGo/list.htm',
         addurl:'http://10.1.167.190:8080/CREpress/saveGo/add.htm',
+        editurl:'http://10.1.167.190:8080/CREpress/saveGo/update.htm',
+        delurl:'http://10.1.167.190:8080/CREpress/saveGo/delete.htm',
+        submiturl:'http://10.1.167.190:8080/CREpress/saveGo/submit.htm',
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
@@ -310,11 +317,11 @@ export default {
         },  
         //编辑界面数据  
         editForm: {  
-            id: 0,  
+            id: '',
             fromStation: '',  
             trainNumber: '',  
             //departDate: '', 
-            exitportStation: '', 
+            exitPortStation: '', 
             overseasStation: '',
             overseasCountry: '',
             overseasCity: '',
@@ -347,8 +354,19 @@ export default {
     mounted () {
         this.searchForm.orgID = sessionStorage.orgId;
         this.searchForm.orgName = sessionStorage.orgName;
+        this.searchForm.departDateBegin = new Date('2018','00','01');
+        this.searchForm.departDateEnd = new Date('2018','00','31');
+        this.loadingData(this.searchForm.status, this.searchForm.departDateBegin, this.searchForm.departDateEnd, this.currentPage, this.pageSize);
     },
     methods: {
+        tableRowClassName({row}) {
+            if (row.status == 1) {
+              return 'edit-row';
+            } else if (row.status == 2) {
+              return 'submit-row';
+            }
+            return '';
+          },
         //表格重新加载数据  
         loadingData:function(status, DateBegin, DateEnd, pageNum, pageSize) {
             let _self = this;  
@@ -399,24 +417,19 @@ export default {
         //表格新建事件  
         addClick:function(formName) {  
             let _self = this;  
-            // if (_self.$refs[formName] != undefined) {
-            //     _self.$refs[formName].resetFields();
-            // }
-            this.editFormVisible = true;  
+            if (_self.$refs[formName] != undefined) {
+                _self.$refs[formName].resetFields();
+            }
+            _self.editFormVisible = true;  
+            _self.addclickflag = 1;
         },  
-        //表格编辑事件  
-        editClick:function(row) {  
-            this.editFormVisible = true;  
-            this.editForm = Object.assign({}, row);  
-        },  
-        //保存点击事件  
-        editSubmit:function(formName){  
+        //新建点击事件  
+        addSubmit:function(formName){  
             let _self = this;
             _self.$refs[formName].validate((valid) => {
               if (valid) {
                 let qs = require('qs');
                 let postData = qs.stringify(_self.editForm) + "&trainType=" + _self.searchForm.trainType;
-                //let postData = qs.stringify({fromStation:'rxl', trainNumber:'123', trainType:1});
                 console.info(postData);
                 _self.axios.post(_self.addurl, postData)
                   .then((response) =>{
@@ -428,7 +441,66 @@ export default {
                             showClose: true,
                             duration: 2000
                         }); 
-                        //_self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
+                        _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
+                    }
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+                _self.editFormVisible = false;
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
+        },  
+        //表格编辑事件  
+        editClick:function(row) {  
+            this.addclickflag = 0;
+            this.editFormVisible = true;  
+            this.editForm = Object.assign({}, row);  
+        },  
+        //保存点击事件  
+        editSubmit:function(formName){  
+            let _self = this;
+            _self.$refs[formName].validate((valid) => {
+              if (valid) {
+                let qs = require('qs');
+                //let postData = qs.stringify(_self.editForm) + "&trainType=" + _self.searchForm.trainType;
+                let postData1 = qs.stringify({
+                    id: _self.editForm.id,
+                    fromStation: _self.editForm.fromStation,  
+                    trainNumber: _self.editForm.trainNumber,  
+                    exitPortStation: _self.editForm.exitPortStation, 
+                    overseasStation: _self.editForm.overseasStation,
+                    overseasCountry: _self.editForm.overseasCountry,
+                    overseasCity: _self.editForm.overseasCity,
+                    trainQty: _self.editForm.trainQty,
+                    carriageQty: _self.editForm.carriageQty,
+                    heavyQtyTwenty: _self.editForm.heavyQtyTwenty,
+                    emptyQtyTwenty: _self.editForm.emptyQtyTwenty,
+                    heavyQtyForty: _self.editForm.heavyQtyForty,
+                    emptyQtyForty: _self.editForm.emptyQtyForty,
+                    heavyQtyFortyfive: _self.editForm.heavyQtyFortyfive,
+                    emptyQtyFortyfive: _self.editForm.emptyQtyFortyfive,
+                    teu: _self.editForm.teu,
+                    coldTEU: _self.editForm.coldTEU,
+                    coldWeight: _self.editForm.coldWeight,
+                    remark: _self.editForm.remark,
+                    status: _self.editForm.status
+                });
+                console.info(postData1);
+                _self.axios.post(_self.editurl, postData1)
+                  .then((response) =>{
+                    console.log(response);
+                    if (response.data.success) {
+                        _self.$message({  
+                            message: response.data.msg,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        }); 
+                        _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
                     }
                   })
                   .catch((error)=> {
@@ -444,17 +516,57 @@ export default {
         //表格删除事件  
         deleteClick:function(row) {  
             var _self = this;  
-            this.$confirm('确认删除' + row.name +'吗?', '提示', {  
+            this.$confirm('确认删除' + row.fromStation + row.trainNumber +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
-                _self.$message({  
-                    message: row.name + '删除成功',  
-                    type: 'success'  
-                });  
-                _self.loadingData();//重新加载数据  
-            }).catch(function(e){  
-                if(e != "cancel")  
-                    console.log("出现错误：" + e);  
+                let qs = require('qs');
+                let postData = qs.stringify({
+                    id:row.id
+                });
+                _self.axios.post(_self.delurl, postData)
+                  .then((response) =>{
+                    console.log(response);
+                    if (response.data.success) {
+                        _self.$message({  
+                            message: response.data.msg,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        }); 
+                        _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
+                    }
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+            });  
+        },  
+        //表格提交事件  
+        submitClick:function(row) {  
+            var _self = this;  
+            this.$confirm('确认提交 ' + row.fromStation + ' ' + row.trainNumber +' 吗? 提交后将无法编辑修改该数据。', '提示', {  
+                type: 'warning'  
+            }).then(function(){  
+                let qs = require('qs');
+                let postData = qs.stringify({
+                    id:row.id
+                });
+                _self.axios.post(_self.submiturl, postData)
+                  .then((response) =>{
+                    console.log(response);
+                    if (response.data.success) {
+                        _self.$message({  
+                            message: response.data.msg,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        }); 
+                        _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
+                    }
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
             });  
         },  
         //表格勾选事件  
@@ -479,7 +591,7 @@ export default {
             var ids = "";  
             for(var i=0;i<multipleSelection.length;i++) {  
                 var row = multipleSelection[i];  
-                ids += row.name + ","  
+                ids += row.id + ","  
             }  
             this.$confirm('确认删除' + ids +'吗?', '提示', {  
                 type: 'warning'  
@@ -494,7 +606,7 @@ export default {
                     console.log("出现错误：" + e);  
             });  
         },  
-        //表格提交事件  
+        //批量提交  
         submitSelection:function() {  
             alert("提交");  
             var _self = this;  
@@ -505,27 +617,34 @@ export default {
             console.log('每页 ' + val +' 条');  
             this.pageSize = val;  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);//重新加载数据  
         },  
         //当前页修改事件  
         currentPageChange:function(val) {  
             this.currentPage = val;  
             console.log('当前页: ' + val);  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);//重新加载数据  
         },  
     }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style>
 h1{margin-top: 0;}
 .mybtn{
     padding: 4px;
-    margin: 0;
+    margin: 0 !important;
 }
 .line{
     text-align: center;
+}
+.el-table .edit-row {
+    background: #e9f7e2;
+}
+
+.el-table .submit-row {
+    background: #fff;
 }
 </style>
