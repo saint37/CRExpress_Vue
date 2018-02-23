@@ -14,15 +14,12 @@
                 </el-form-item>  
             </el-form>
         </el-row>
-        
         <!--列表顶部搜索和工具条-->
         <el-row>  
             <el-form :inline="true" :model="searchForm" class="demo-form-inline">  
                 <el-form-item>
                     <el-select v-model="searchForm.status" placeholder="全部">
-                      <el-option label="全部" value="all"></el-option>
-                      <el-option label="未提交" value="unsubmit"></el-option>
-                      <el-option label="已提交" value="submit"></el-option>
+                        <el-option v-for="item in options" :label="item.label" :value="item.value"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item style="width: 350px">  
@@ -48,7 +45,7 @@
                 </el-form-item>
                 <el-form-item>  
                     <el-button type="primary" icon="edit" @click="searchClick">查询</el-button>
-                    <el-button type="success" icon="edit" @click="addClick">新增</el-button>
+                    <el-button type="success" icon="edit" @click="addClick('editForm')">新增</el-button>
                 </el-form-item>  
             </el-form>  
         </el-row>  
@@ -64,10 +61,19 @@
                 </el-table-column>
                 <el-table-column label="操作">  
                     <template scope="scope">  
-                        <el-button type="primary" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
-                        <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button>  
+                        <div v-if="scope.row.status == 1">
+                            <el-button type="primary" class="mybtn" size="mini" icon="edit" @click="editClick(scope.row)"><i class="el-icon-edit"></i></el-button>
+                            <el-button type="danger" class="mybtn" size="mini" icon="delete" @click="deleteClick(scope.row)"><i class="el-icon-delete"></i></el-button> 
+                        </div>
+                        <div v-else></div>
                     </template>  
-                </el-table-column>  
+                </el-table-column> 
+                <el-table-column prop="status" label="状态">
+                    <template scope="scope">
+                        <div v-if="scope.row.status == 1" style="color: #5daf34">未提交</div>
+                        <div v-else-if="scope.row.status == 2" style="color: #409EFF">已提交</div>
+                    </template>
+                </el-table-column> 
                 <el-table-column prop="fromStation" label="发站"></el-table-column>
                 <el-table-column prop="trainNumber" label="发车车次"></el-table-column>
                 <el-table-column prop="departDate" label="发车日期"></el-table-column>
@@ -134,101 +140,101 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="发车日期">  
+                        <el-form-item label="发车日期" prop="departDate">  
                             <el-date-picker type="date" placeholder="选择日期" v-model="editForm.departDate" style="width: 150px;"></el-date-picker>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="出境口岸站">  
+                        <el-form-item label="出境口岸站" prop="exitportStation">  
                             <el-input v-model="editForm.exitportStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站">  
+                        <el-form-item label="境外到站" prop="overseasStation">  
                             <el-input v-model="editForm.overseasStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站所属国">  
+                        <el-form-item label="境外到站所属国" prop="overseasCountry">  
                             <el-input v-model="editForm.overseasCountry" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站所属城市">  
+                        <el-form-item label="境外到站所属城市" prop="overseasCity">  
                             <el-input v-model="editForm.overseasCity" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="列数">  
+                        <el-form-item label="列数" prop="trainQty">  
                             <el-input v-model="editForm.trainQty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="车数">  
+                        <el-form-item label="车数" prop="carriageQty">  
                             <el-input v-model="editForm.carriageQty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="20尺重箱数">  
+                        <el-form-item label="20尺重箱数" prop="heavyQtyTwenty">  
                             <el-input v-model="editForm.heavyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="20尺空箱数">  
+                        <el-form-item label="20尺空箱数" prop="emptyQtyTwenty">  
                             <el-input v-model="editForm.emptyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="40尺重箱数">  
+                        <el-form-item label="40尺重箱数" prop="heavyQtyForty">  
                             <el-input v-model="editForm.heavyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="40尺空箱数">  
+                        <el-form-item label="40尺空箱数" prop="emptyQtyForty">  
                             <el-input v-model="editForm.emptyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="45尺重箱数">  
+                        <el-form-item label="45尺重箱数" prop="heavyQtyFortyfive">  
                             <el-input v-model="editForm.heavyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="45尺空箱数">  
+                        <el-form-item label="45尺空箱数" prop="emptyQtyFortyfive">  
                             <el-input v-model="editForm.emptyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="折合TEU">  
+                        <el-form-item label="折合TEU" prop="teu">  
                             <el-input v-model="editForm.teu" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="其中冷藏箱TEU">  
+                        <el-form-item label="其中冷藏箱TEU" prop="coldTEU">  
                             <el-input v-model="editForm.coldTEU" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="冷藏箱重量">  
+                        <el-form-item label="冷藏箱重量" prop="coldWeight">  
                             <el-input v-model="editForm.coldWeight" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="备注">  
+                        <el-form-item label="备注" prop="remark">  
                             <el-input type="textarea" v-model="editForm.remark"></el-input>  
                         </el-form-item>  
                     </el-col>
@@ -236,7 +242,7 @@
             </el-form>  
             <div slot="footer" class="dialog-footer">  
                 <el-button @click.native="editFormVisible = false">取消</el-button>  
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>  
+                <el-button type="primary" @click.native="editSubmit('editForm')" :loading="editLoading">保存</el-button>  
             </div>  
         </el-dialog>  
     </el-main>
@@ -261,14 +267,24 @@ export default {
             realName: '',
             mobile: ''
         },  
+        options: [{
+          value: 4,
+          label: '全部'
+        }, {
+          value: 1,
+          label: '未提交'
+        }, {
+          value: 2,
+          label: '已提交'
+        }],
         //搜索表单  
         searchForm: {  
-            formType: 'formGo',
-            trainType: 1,
-            status: 1,  
+            formType: 'formGo', //formBack, formGo 
+            trainType: 1, //1Eur,2Asia
+            status: 4,  //默认全部
             departDateBegin: '',
             departDateEnd: '',
-            orgID:'',
+            orgID:19,
             orgName:'',
         },  
         multipleSelection: [],
@@ -279,16 +295,17 @@ export default {
         //总记录数  
         total:100,  
         //请求的URL
-        url:'http://10.1.167.190:8080/CREpress/business/list.htm',
-        addurl:'http://10.1.167.174:8080/CRExpress/export/out.htm',
+        testurl:'http://10.1.167.188:3000/train',
+        url:'http://10.1.167.190:8080/CREpress/saveGo/list.htm',
+        addurl:'http://10.1.167.190:8080/CREpress/saveGo/add.htm',
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
-            name: [  
-                { required: true, message: '请输入姓名', trigger: 'blur' }  
+            fromStation: [  
+                { required: true, message: '请输入发站', trigger: 'blur' }  
             ]  
         },  
         //编辑界面数据  
@@ -296,7 +313,7 @@ export default {
             id: 0,  
             fromStation: '',  
             trainNumber: '',  
-            departDate: '', 
+            //departDate: '', 
             exitportStation: '', 
             overseasStation: '',
             overseasCountry: '',
@@ -312,7 +329,8 @@ export default {
             teu: '',
             coldTEU: '',
             coldWeight: '',
-            remark: ''
+            remark: '',
+            status: 1 //1未提交 2已提交 3已删除
         },  
         pickerOptions0: {
           disabledDate:(time) => {
@@ -335,12 +353,23 @@ export default {
         loadingData:function(status, DateBegin, DateEnd, pageNum, pageSize) {
             let _self = this;  
             let qs = require('qs');
+
+            // _self.axios.get(_self.testurl)
+            //       .then((response) =>{
+            //         _self.tableData = response.data.root;
+            //         console.log(response.data);
+            //         _self.total = parseInt(response.data.total);
+            //       })
+            //       .catch((error)=> {
+            //         console.log(error);
+            //       });
+
             if(DateBegin & DateEnd) {
                 let Date1 = DateBegin.getFullYear() + '-' + (DateBegin.getMonth() + 1) + '-' + DateBegin.getDate();  
                 let Date2 = DateEnd.getFullYear() + '-' + (DateEnd.getMonth() + 1) + '-' + DateEnd.getDate();
                 let postData = qs.stringify({
                     formType:_self.searchForm.formType, trainType:_self.searchForm.trainType,
-                    orgID:_self.searchForm.orgID, status:_self.searchForm.status,
+                    orgID:_self.searchForm.orgID, status: _self.searchForm.status,
                     departDateBegin:Date1,departDateEnd:Date2, page:pageNum, limit:pageSize
                 });
                 console.log(postData);
@@ -362,11 +391,18 @@ export default {
                 });
             }
         },  
-        //表格保存事件  
+        //表格查询事件  
         searchClick:function() {  
-            alert("搜索");  
             var _self = this;  
-            _self.loadingData();//重新加载数据  
+            _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);//重新加载数据  
+        },   
+        //表格新建事件  
+        addClick:function(formName) {  
+            let _self = this;  
+            // if (_self.$refs[formName] != undefined) {
+            //     _self.$refs[formName].resetFields();
+            // }
+            this.editFormVisible = true;  
         },  
         //表格编辑事件  
         editClick:function(row) {  
@@ -374,8 +410,36 @@ export default {
             this.editForm = Object.assign({}, row);  
         },  
         //保存点击事件  
-        editSubmit:function(){  
-            console.info(this.editForm);  
+        editSubmit:function(formName){  
+            let _self = this;
+            _self.$refs[formName].validate((valid) => {
+              if (valid) {
+                let qs = require('qs');
+                let postData = qs.stringify(_self.editForm) + "&trainType=" + _self.searchForm.trainType;
+                //let postData = qs.stringify({fromStation:'rxl', trainNumber:'123', trainType:1});
+                console.info(postData);
+                _self.axios.post(_self.addurl, postData)
+                  .then((response) =>{
+                    console.log(response);
+                    if (response.data.success) {
+                        _self.$message({  
+                            message: response.data.msg,
+                            type: 'success',
+                            showClose: true,
+                            duration: 2000
+                        }); 
+                        //_self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);
+                    }
+                  })
+                  .catch((error)=> {
+                    console.log(error);
+                  }); 
+                _self.editFormVisible = false;
+              } else {
+                console.log('error submit!!');
+                return false;
+              }
+            });
         },  
         //表格删除事件  
         deleteClick:function(row) {  
@@ -393,18 +457,6 @@ export default {
                     console.log("出现错误：" + e);  
             });  
         },  
-        //新建事件  
-        addClick:function() {  
-            var _self = this;  
-            this.editFormVisible = true;  
-            //_self.loadingData();//重新加载数据  
-        },  
-        //表格提交事件  
-        submitSelection:function() {  
-            alert("提交");  
-            var _self = this;  
-            _self.loadingData();//重新加载数据  
-        }, 
         //表格勾选事件  
         selectionChange:function(val) {  
             for(var i=0;i<val.length;i++) {  
@@ -442,6 +494,12 @@ export default {
                     console.log("出现错误：" + e);  
             });  
         },  
+        //表格提交事件  
+        submitSelection:function() {  
+            alert("提交");  
+            var _self = this;  
+            _self.loadingData(_self.searchForm.status, _self.searchForm.departDateBegin, _self.searchForm.departDateEnd, _self.currentPage, _self.pageSize);//重新加载数据  
+        }, 
         //分页大小修改事件  
         pageSizeChange:function(val) {  
             console.log('每页 ' + val +' 条');  

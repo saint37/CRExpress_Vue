@@ -91,5 +91,49 @@
             "gender": 1,
             "mobile": "13611036586"
         }]
+    },
+    "train":{
+        "total": "4",
+        "root": [{
+            "total": 0,
+            "page": 1,
+            "limit": 25,            
+            "fromStation": "Beijing",  
+            "trainNumber": "Z234",  
+            "exitportStation": "aaa", 
+            "overseasStation": "bbb",
+            "overseasCountry": "ccc",
+            "status": 1
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,            
+            "fromStation": "Zhengzhou",  
+            "trainNumber": "Z115",  
+            "exitportStation": "aaa", 
+            "overseasStation": "bbb",
+            "overseasCountry": "ccc",
+            "status": 1
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,            
+            "fromStation": "Shanghai",  
+            "trainNumber": "K7865",  
+            "exitportStation": "aaa", 
+            "overseasStation": "bbb",
+            "overseasCountry": "ccc",
+            "status": 2
+        }, {
+            "total": 0,
+            "page": 1,
+            "limit": 25,            
+            "fromStation": "Chongqing",  
+            "trainNumber": "D176",  
+            "exitportStation": "aaa", 
+            "overseasStation": "bbb",
+            "overseasCountry": "ccc",
+            "status": 3
+        }]
     }
 }

@@ -229,6 +229,7 @@ export default {
         updateurl: 'http://10.1.167.174:8080/CRExpress/user/update.htm',
         updatePassurl: 'http://10.1.167.174:8080/CRExpress/user/updatePassword.htm',
         delurl: 'http://10.1.167.174:8080/CRExpress/user/delete.htm',
+        delurlist: 'http://10.1.167.174:8080/CRExpress/user/deleteList.htm',
         reseturl:'http://10.1.167.174:8080/CRExpress//user/resetPassword.htm',
         //当前页  
         currentPage:1,
