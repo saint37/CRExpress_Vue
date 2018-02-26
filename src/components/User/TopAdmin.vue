@@ -228,7 +228,7 @@ export default {
         //搜索条件
         criteria: '',
         //请求的URL
-        //url:'http://localhost:3000/list',
+        //url:'http://10.1.167.188:3000/list',
         url:'http://10.1.167.174:8080/CRExpress/user/listUser.htm',
         addurl: 'http://10.1.167.174:8080/CRExpress/user/add.htm',
         updateurl: 'http://10.1.167.174:8080/CRExpress/user/update.htm',
@@ -236,6 +236,7 @@ export default {
         delurl: 'http://10.1.167.174:8080/CRExpress/user/delete.htm',
         delurlist: 'http://10.1.167.174:8080/CRExpress/user/deleteList.htm',
         reseturl:'http://10.1.167.174:8080/CRExpress//user/resetPassword.htm',
+        reseturlist:'',
         //当前页  
         currentPage:1,
         //分页大小  
@@ -338,6 +339,7 @@ export default {
         loadingData: function(criteria, pageNum, pageSize){
             let _self = this;
             let qs = require('qs');
+            //_self.axios.get(_self.url)
             _self.axios.post(_self.url, qs.stringify({
                 parameter:criteria, page:pageNum, limit:pageSize
             }))
@@ -380,6 +382,14 @@ export default {
                             _self.loadingData(this.criteria, this.currentPage, this.pageSize);
                         });                        
                     }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
@@ -418,6 +428,14 @@ export default {
                             duration: 2000
                         }); 
                         _self.reloadingUser();
+                    }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
                     }
                   })
                   .catch((error)=> {
@@ -458,6 +476,14 @@ export default {
                             showClose: true,
                             duration: 2000
                         });                         
+                    }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
                     }
                   })
                   .catch((error)=> {
@@ -507,13 +533,21 @@ export default {
                             _self.loadingData(this.criteria, this.currentPage, this.pageSize);
                         });
                     }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
                   }); 
             });  
         }, 
-        //删除所选，批量删除  
+        //删除所选，批量删除
         removeSelection:function() {  
             let _self = this;  
             let multipleSelection = this.multipleSelection;  
@@ -568,6 +602,58 @@ export default {
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
             });
+        },    
+        removeSelection2:function() {  
+            let _self = this;  
+            let multipleSelection = this.multipleSelection;  
+            if(multipleSelection.length < 1) {
+                _self.$message({  
+                    message: '请至少选中一条记录',  
+                    type: 'error',
+                    duration: 2000 
+                });  
+                return;  
+            }  
+            let success = 0;
+            let ids = "";  
+            let postData = [];
+            for(let i=0;i<multipleSelection.length;i++) {  
+                let row = multipleSelection[i];  
+                ids += row.username + ",";
+                let temp = {id : row.id, roleId : row.roleId};
+                postData.push(temp);
+            }  
+            this.$confirm('确认删除' + ids +'吗?', '提示', {  
+                type: 'warning'  
+            }).then(function(){  
+                console.log("删除:"+JSON.stringify(postData));
+                // _self.axios.post(_self.delurlist, JSON.stringify(postData))
+                //   .then((response) =>{
+                //     console.log(response);
+                //     if(response.data.success){
+                //         _self.$message({  
+                //             message: ids + '删除成功',
+                //             type: 'success',
+                //             showClose: true,
+                //             duration: 3000 
+                //         }); 
+                //         _self.$nextTick(function(){
+                //             _self.loadingData(this.criteria, this.currentPage, this.pageSize);
+                //         });
+                //     }
+                //     else {
+                //         _self.$message({  
+                //             message: response.data.msg,  
+                //             type: 'error',
+                //             showClose: true,
+                //             duration: 3000
+                //         });
+                //     }
+                //   })
+                //   .catch((error)=> {
+                //     console.log(error);
+                //   });  
+            });
         },   
         //重置密码事件  
         resetClick:function(row) {  
@@ -586,6 +672,14 @@ export default {
                             showClose: true,
                             duration: 2000 
                         }); 
+                    }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
                     }
                   })
                   .catch((error)=> {
@@ -634,6 +728,56 @@ export default {
             }).catch(function(e){  
                 if(e != "cancel")  
                     console.log("出现错误：" + e);  
+            }); 
+        }, 
+        resetPassword2:function(){  
+            let _self = this;  
+            let multipleSelection = this.multipleSelection;  
+            if(multipleSelection.length < 1) {
+                _self.$message({  
+                    message: '请至少选中一条记录',  
+                    type: 'error'  
+                });  
+                return;  
+            }  
+            let ids = ""; 
+            let postData =[];
+            for(let i=0;i<multipleSelection.length;i++) {  
+                let row = multipleSelection[i];  
+                ids += row.username + ",";
+                let temp = {id : row.id, roleId : row.roleId};
+                postData.push(temp);
+            }  
+            this.$confirm('确认重置' + ids +'的密码吗?', '提示', {  
+                type: 'warning'  
+            }).then(function(){  
+                console.log("重置:"+JSON.stringify(postData));
+                // _self.axios.post(_self.reseturlist, JSON.stringify(postData))
+                //   .then((response) =>{
+                //     console.log(response);
+                //     if(response.data.success){
+                //         _self.$message({  
+                //             message: ids + '重置成功',
+                //             type: 'success',
+                //             showClose: true,
+                //             duration: 3000 
+                //         }); 
+                //         _self.$nextTick(function(){
+                //             _self.loadingData(this.criteria, this.currentPage, this.pageSize);
+                //         });
+                //     }
+                //     else {
+                //         _self.$message({  
+                //             message: response.data.msg,  
+                //             type: 'error',
+                //             showClose: true,
+                //             duration: 3000
+                //         });
+                //     }
+                //   })
+                //   .catch((error)=> {
+                //     console.log(error);
+                //   });  
             }); 
         }, 
         //分页大小修改事件  

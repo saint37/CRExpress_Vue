@@ -356,7 +356,7 @@ export default {
         this.searchForm.orgName = sessionStorage.orgName;
         this.searchForm.departDateBegin = new Date('2018','00','01');
         this.searchForm.departDateEnd = new Date('2018','00','31');
-        this.loadingData(this.searchForm.status, this.searchForm.departDateBegin, this.searchForm.departDateEnd, this.currentPage, this.pageSize);
+        //this.loadingData(this.searchForm.status, this.searchForm.departDateBegin, this.searchForm.departDateEnd, this.currentPage, this.pageSize);
     },
     methods: {
         tableRowClassName({row}) {

@@ -371,7 +371,7 @@ export default {
                             message: '添加用户成功',  
                             type: 'success',
                             showClose: true,
-                            duration: 2000
+                            duration: 3000
                         });
                         _self.$nextTick(function(){
                             _self.loadingData(this.criteria, this.currentPage, this.pageSize);
