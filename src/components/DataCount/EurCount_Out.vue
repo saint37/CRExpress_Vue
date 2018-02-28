@@ -40,7 +40,7 @@
         <el-row>
             <el-form :inline="true" :model="exportForm" class="demo-form-inline">  
                 <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
-                <el-form-item label="铁路局">  
+                <!-- <el-form-item label="铁路局">  
                     <el-input v-model="exportForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
                 <el-form-item label="填表人">  
@@ -48,7 +48,7 @@
                 </el-form-item>  
                 <el-form-item label="联系电话">  
                     <el-input v-model="exportForm.mobile" :disabled="true" size="mini" placeholder="电话"></el-input>  
-                </el-form-item>  
+                </el-form-item>   -->
             </el-form>
         </el-row>
         <!--列表-->  

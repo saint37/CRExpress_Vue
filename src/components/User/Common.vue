@@ -218,6 +218,14 @@ export default {
                         }); 
                         _self.reloadingUser();
                     }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
+                    }
                   })
                   .catch((error)=> {
                     console.log(error);
@@ -257,6 +265,14 @@ export default {
                             showClose: true,
                             duration: 2000
                         });                         
+                    }
+                    else {
+                        _self.$message({  
+                            message: response.data.msg,  
+                            type: 'error',
+                            showClose: true,
+                            duration: 3000
+                        });
                     }
                   })
                   .catch((error)=> {

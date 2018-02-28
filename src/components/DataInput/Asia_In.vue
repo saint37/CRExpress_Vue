@@ -2,7 +2,7 @@
     <el-main>
         <el-row>
             <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
+                <el-form-item><h1>中亚班列回程运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
                     <el-input v-model="searchForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
@@ -76,17 +76,17 @@
                         <div v-else-if="scope.row.status == 2" style="color: #409EFF">已提交</div>
                     </template>
                 </el-table-column> 
-                <el-table-column prop="fromStation" label="发站"></el-table-column>
+                <el-table-column prop="portStation" label="口岸站"></el-table-column>
                 <el-table-column prop="trainNumber" label="发车车次"></el-table-column>
                 <el-table-column prop="departDate" label="发车日期">
                     <template scope="scope">
                         {{scope.row.departDate ? maxSlice(scope.row.departDate):scope.row.departDate}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="exitPortStation" label="出境口岸站"></el-table-column>
-                <el-table-column prop="overseasStation" label="境外到站"></el-table-column>
-                <el-table-column prop="overseasCountry" label="境外到站所属国家"></el-table-column>
-                <el-table-column prop="overseasCity" label="境外到站所属城市"></el-table-column>
+                <el-table-column prop="domesticStation" label="国内到站"></el-table-column>
+                <el-table-column prop="overseasStation" label="境外发站"></el-table-column>
+                <el-table-column prop="overseasCountry" label="境外发站所属国家"></el-table-column>
+                <el-table-column prop="overseasCity" label="境外发站所属城市"></el-table-column>
                 <el-table-column prop="trainQty" label="列数"></el-table-column>
                 <el-table-column prop="carriageQty" label="车数"></el-table-column>
                 <el-table-column prop="" label="箱数">
@@ -136,8 +136,8 @@
             <el-form :model="editForm" label-width="140px" :rules="editFormRules" ref="editForm" size="mini"> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="发站" prop="fromStation">  
-                            <el-input v-model="editForm.fromStation" auto-complete="off"></el-input>  
+                        <el-form-item label="口岸站" prop="portStation">  
+                            <el-input v-model="editForm.portStation" auto-complete="off"></el-input>  
                         </el-form-item>
                     </el-col>
                     <el-col :span="6">
@@ -153,22 +153,22 @@
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="出境口岸站" prop="exitPortStation">  
-                            <el-input v-model="editForm.exitPortStation" auto-complete="off"></el-input>  
+                        <el-form-item label="国内到站" prop="domesticStation">  
+                            <el-input v-model="editForm.domesticStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站" prop="overseasStation">  
+                        <el-form-item label="境外发站" prop="overseasStation">  
                             <el-input v-model="editForm.overseasStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站所属国" prop="overseasCountry">  
+                        <el-form-item label="境外发站所属国" prop="overseasCountry">  
                             <el-input v-model="editForm.overseasCountry" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
-                        <el-form-item label="境外到站所属城市" prop="overseasCity">  
+                        <el-form-item label="境外发站所属城市" prop="overseasCity">  
                             <el-input v-model="editForm.overseasCity" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
@@ -287,8 +287,8 @@ export default {
         }],
         //搜索表单  
         searchForm: {  
-            formType: 'formGo', //formBack, formGo 
-            trainType: 1, //1Eur,2Asia
+            formType: 'formBack', //formBack, formGo 
+            trainType: 2, //1Eur,2Asia
             status: 4,  //默认全部
             departDateBegin: '',
             departDateEnd: '',
@@ -304,28 +304,28 @@ export default {
         total:100,  
         //请求的URL
         testurl:'http://10.1.167.188:3000/train',
-        url:'http://10.1.167.190:8080/CREpress/saveGo/list.htm',
-        addurl:'http://10.1.167.190:8080/CREpress/saveGo/add.htm',
-        editurl:'http://10.1.167.190:8080/CREpress/saveGo/update.htm',
-        delurl:'http://10.1.167.190:8080/CREpress/saveGo/delete.htm',
-        submiturl:'http://10.1.167.190:8080/CREpress/saveGo/submit.htm',
+        url:'http://10.1.167.190:8080/CREpress/saveBack/list.htm',
+        addurl:'http://10.1.167.190:8080/CREpress/saveBack/add.htm',
+        editurl:'http://10.1.167.190:8080/CREpress/saveBack/update.htm',
+        delurl:'http://10.1.167.190:8080/CREpress/saveBack/delete.htm',
+        submiturl:'http://10.1.167.190:8080/CREpress/saveBack/submit.htm',
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
-            fromStation: [  
+            portStation: [  
                 { required: true, message: '请输入发站', trigger: 'blur' }  
             ]  
         },  
         //编辑界面数据  
         editForm: {  
             id: '',
-            fromStation: '',  
+            portStation: '',  
             trainNumber: '',  
             departDate: '', 
-            exitPortStation: '', 
+            domesticStation: '', 
             overseasStation: '',
             overseasCountry: '',
             overseasCity: '',
@@ -443,10 +443,10 @@ export default {
                 let postData1 = qs.stringify({
                     trainType:_self.searchForm.trainType,
                     id: _self.editForm.id,
-                    fromStation: _self.editForm.fromStation,  
+                    portStation: _self.editForm.portStation,  
                     trainNumber: _self.editForm.trainNumber,
                     departDate: Date1,
-                    exitPortStation: _self.editForm.exitPortStation, 
+                    domesticStation: _self.editForm.domesticStation, 
                     overseasStation: _self.editForm.overseasStation,
                     overseasCountry: _self.editForm.overseasCountry,
                     overseasCity: _self.editForm.overseasCity,
@@ -512,10 +512,10 @@ export default {
                 let postData1 = qs.stringify({
                     trainType:_self.searchForm.trainType,
                     id: _self.editForm.id,
-                    fromStation: _self.editForm.fromStation,  
+                    portStation: _self.editForm.portStation,  
                     trainNumber: _self.editForm.trainNumber,
                     departDate: Date1,
-                    exitPortStation: _self.editForm.exitPortStation, 
+                    domesticStation: _self.editForm.domesticStation, 
                     overseasStation: _self.editForm.overseasStation,
                     overseasCountry: _self.editForm.overseasCountry,
                     overseasCity: _self.editForm.overseasCity,
@@ -568,7 +568,7 @@ export default {
         //表格删除事件  
         deleteClick:function(row) {  
             var _self = this;  
-            this.$confirm('确认删除' + row.fromStation + row.trainNumber +'吗?', '提示', {  
+            this.$confirm('确认删除' + row.portStation + row.trainNumber +'吗?', '提示', {  
                 type: 'warning'  
             }).then(function(){  
                 let qs = require('qs');
@@ -604,7 +604,7 @@ export default {
         //表格提交事件  
         submitClick:function(row) {  
             var _self = this;  
-            this.$confirm('确认提交 ' + row.fromStation + ' ' + row.trainNumber +' 吗? 提交后将无法编辑修改该数据。', '提示', {  
+            this.$confirm('确认提交 ' + row.portStation + ' ' + row.trainNumber +' 吗? 提交后将无法编辑修改该数据。', '提示', {  
                 type: 'warning'  
             }).then(function(){  
                 let qs = require('qs');

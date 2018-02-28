@@ -2,7 +2,7 @@
     <el-main>
         <el-row>
             <el-form :inline="true" :model="saveForm" class="demo-form-inline">  
-                <el-form-item><h1>中欧班列去程运量统计表</h1></el-form-item>
+                <el-form-item><h1>中亚班列去程运量统计表</h1></el-form-item>
                 <el-form-item label="铁路局">  
                     <el-input v-model="searchForm.orgName" :disabled="true" size="mini" placeholder="铁路局"></el-input>  
                 </el-form-item> 
@@ -288,7 +288,7 @@ export default {
         //搜索表单  
         searchForm: {  
             formType: 'formGo', //formBack, formGo 
-            trainType: 1, //1Eur,2Asia
+            trainType: 2, //1Eur,2Asia
             status: 4,  //默认全部
             departDateBegin: '',
             departDateEnd: '',
