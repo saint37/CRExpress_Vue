@@ -102,7 +102,7 @@
                         <el-table-column prop="heavyQtyFortyfive" label="重箱"></el-table-column>
                         <el-table-column prop="emptyQtyFortyfive" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="teu" label="折合TEU"></el-table-column>
+                    <el-table-column prop="TEU" label="折合TEU"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="" label="其中冷藏箱">
                     <el-table-column prop="coldTEU" label="TEU"></el-table-column>
@@ -223,8 +223,8 @@
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="折合TEU" prop="teu">  
-                            <el-input v-model="editForm.teu" auto-complete="off"></el-input>  
+                        <el-form-item label="折合TEU" prop="TEU">  
+                            <el-input v-model="editForm.TEU" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
@@ -304,11 +304,12 @@ export default {
         total:100,  
         //请求的URL
         testurl:'http://10.1.167.188:3000/train',
-        url:'http://10.1.167.190:8080/CREpress/saveBack/list.htm',
-        addurl:'http://10.1.167.190:8080/CREpress/saveBack/add.htm',
-        editurl:'http://10.1.167.190:8080/CREpress/saveBack/update.htm',
-        delurl:'http://10.1.167.190:8080/CREpress/saveBack/delete.htm',
-        submiturl:'http://10.1.167.190:8080/CREpress/saveBack/submit.htm',
+        //url:'http://10.1.167.190:8080/CREpress/saveBack/list.htm',
+        url:'http://10.1.167.174:8080/CRExpress/export/view.htm',
+        addurl:'http://10.1.167.174:8080/CRExpress/saveBack/add.htm',
+        editurl:'http://10.1.167.174:8080/CRExpress/saveBack/update.htm',
+        delurl:'http://10.1.167.174:8080/CRExpress/saveBack/delete.htm',
+        submiturl:'http://10.1.167.174:8080/CRExpress/saveBack/submit.htm',
         //删除的弹出框  
         deleteVisible:false,  
         //编辑界面是否显示  
@@ -329,17 +330,18 @@ export default {
             overseasStation: '',
             overseasCountry: '',
             overseasCity: '',
-            trainQty: '',
-            carriageQty: '',
-            heavyQtyTwenty: '',
-            emptyQtyTwenty: '',
-            heavyQtyForty: '',
-            emptyQtyForty: '',
-            heavyQtyFortyfive: '',
-            emptyQtyFortyfive: '',
-            teu: '',
-            coldTEU: '',
-            coldWeight: '',
+            trainQty: 0,
+            carriageQty: 0,
+            heavyQtyTwenty: 0,
+            emptyQtyTwenty: 0,
+            heavyQtyForty: 0,
+            emptyQtyForty: 0,
+            heavyQtyFortyfive: 0,
+            emptyQtyFortyfive: 0,
+            TEU: 0,
+            coldTEU: 0,
+            coldWeight: 0,
+            totalLoad:0,
             remark: '',
             status: 1 //1未提交 2已提交 3已删除
         },  
@@ -358,8 +360,8 @@ export default {
     mounted () {
         this.searchForm.orgID = sessionStorage.orgId;
         this.searchForm.orgName = sessionStorage.orgName;
-        this.searchForm.departDateBegin = new Date('2018','00','01');
-        this.searchForm.departDateEnd = new Date('2018','00','31');
+        this.searchForm.departDateBegin = new Date();
+        this.searchForm.departDateEnd = new Date();
         this.saveForm.realName = sessionStorage.realName;
         this.saveForm.mobile = sessionStorage.mobile;
         this.loadingData(this.searchForm.status, this.searchForm.departDateBegin, this.searchForm.departDateEnd, this.currentPage, this.pageSize);
@@ -458,9 +460,10 @@ export default {
                     emptyQtyForty: _self.editForm.emptyQtyForty,
                     heavyQtyFortyfive: _self.editForm.heavyQtyFortyfive,
                     emptyQtyFortyfive: _self.editForm.emptyQtyFortyfive,
-                    teu: _self.editForm.teu,
+                    TEU: _self.editForm.TEU,
                     coldTEU: _self.editForm.coldTEU,
                     coldWeight: _self.editForm.coldWeight,
+                    totalLoad: _self.editForm.totalLoad,
                     remark: _self.editForm.remark,
                     status: _self.editForm.status
                 });
@@ -527,9 +530,10 @@ export default {
                     emptyQtyForty: _self.editForm.emptyQtyForty,
                     heavyQtyFortyfive: _self.editForm.heavyQtyFortyfive,
                     emptyQtyFortyfive: _self.editForm.emptyQtyFortyfive,
-                    teu: _self.editForm.teu,
+                    TEU: _self.editForm.TEU,
                     coldTEU: _self.editForm.coldTEU,
                     coldWeight: _self.editForm.coldWeight,
+                    totalLoad: _self.editForm.totalLoad,
                     remark: _self.editForm.remark,
                     status: _self.editForm.status
                 });

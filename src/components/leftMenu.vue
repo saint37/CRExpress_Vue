@@ -6,7 +6,6 @@
               <el-menu-item index="/User/Common" v-if="roleId == 3">普通用户</el-menu-item>
               <el-menu-item index="/User/Admin" v-else-if="roleId == 2">管理员</el-menu-item>
               <el-menu-item index="/User/TopAdmin" v-else="roleId == 1">系统管理员</el-menu-item>
-              <el-menu-item index="/test">test</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-edit-outline"></i>数据录入</template>

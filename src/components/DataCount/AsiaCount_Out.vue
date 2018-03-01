@@ -85,12 +85,13 @@
                         <el-table-column prop="heavyQtyFortyfive" label="重箱"></el-table-column>
                         <el-table-column prop="emptyQtyFortyfive" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="teu" label="折合TEU"></el-table-column>
+                    <el-table-column prop="TEU" label="折合TEU"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="" label="其中冷藏箱">
                     <el-table-column prop="coldTEU" label="TEU"></el-table-column>
                     <el-table-column prop="coldWeight" label="吨"></el-table-column>
                 </el-table-column>
+                <el-table-column prop="totalLoad" label="整车"></el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
             </el-table>
         </el-row>     
@@ -127,7 +128,7 @@ export default {
   name: 'AsiaCount_Out',
   data () {
     return {
-        orgs:[{"id":19,"flag":1,"upperUnitId":0,"orgStr":"中国铁路总公司"},{"id":1,"flag":2,"upperUnitId":19,"orgStr":"哈尔滨铁路局"},{"id":2,"flag":2,"upperUnitId":19,"orgStr":"沈阳铁路局"},{"id":3,"flag":2,"upperUnitId":19,"orgStr":"北京铁路局"},{"id":4,"flag":2,"upperUnitId":19,"orgStr":"太原铁路局"},{"id":5,"flag":2,"upperUnitId":19,"orgStr":"呼和浩特铁路局"},{"id":6,"flag":2,"upperUnitId":19,"orgStr":"郑州铁路局"},{"id":7,"flag":2,"upperUnitId":19,"orgStr":"武汉铁路局"},{"id":8,"flag":2,"upperUnitId":19,"orgStr":"西安铁路局"},{"id":9,"flag":2,"upperUnitId":19,"orgStr":"济南铁路局"},{"id":10,"flag":2,"upperUnitId":19,"orgStr":"上海铁路局"},{"id":11,"flag":2,"upperUnitId":19,"orgStr":"南昌铁路局"},{"id":12,"flag":2,"upperUnitId":19,"orgStr":"广州铁路（集团）公司"},{"id":13,"flag":2,"upperUnitId":19,"orgStr":"南宁铁路局"},{"id":14,"flag":2,"upperUnitId":19,"orgStr":"成都铁路局"},{"id":15,"flag":2,"upperUnitId":19,"orgStr":"昆明铁路局"},{"id":16,"flag":2,"upperUnitId":19,"orgStr":"兰州铁路局"},{"id":17,"flag":2,"upperUnitId":19,"orgStr":"乌鲁木齐铁路局"},{"id":18,"flag":2,"upperUnitId":19,"orgStr":"青藏铁路公司"}],
+        orgs:[{"id":'',"flag":1,"upperUnitId":0,"orgStr":"全部"},{"id":1,"flag":2,"upperUnitId":19,"orgStr":"哈尔滨铁路局"},{"id":2,"flag":2,"upperUnitId":19,"orgStr":"沈阳铁路局"},{"id":3,"flag":2,"upperUnitId":19,"orgStr":"北京铁路局"},{"id":4,"flag":2,"upperUnitId":19,"orgStr":"太原铁路局"},{"id":5,"flag":2,"upperUnitId":19,"orgStr":"呼和浩特铁路局"},{"id":6,"flag":2,"upperUnitId":19,"orgStr":"郑州铁路局"},{"id":7,"flag":2,"upperUnitId":19,"orgStr":"武汉铁路局"},{"id":8,"flag":2,"upperUnitId":19,"orgStr":"西安铁路局"},{"id":9,"flag":2,"upperUnitId":19,"orgStr":"济南铁路局"},{"id":10,"flag":2,"upperUnitId":19,"orgStr":"上海铁路局"},{"id":11,"flag":2,"upperUnitId":19,"orgStr":"南昌铁路局"},{"id":12,"flag":2,"upperUnitId":19,"orgStr":"广州铁路（集团）公司"},{"id":13,"flag":2,"upperUnitId":19,"orgStr":"南宁铁路局"},{"id":14,"flag":2,"upperUnitId":19,"orgStr":"成都铁路局"},{"id":15,"flag":2,"upperUnitId":19,"orgStr":"昆明铁路局"},{"id":16,"flag":2,"upperUnitId":19,"orgStr":"兰州铁路局"},{"id":17,"flag":2,"upperUnitId":19,"orgStr":"乌鲁木齐铁路局"},{"id":18,"flag":2,"upperUnitId":19,"orgStr":"青藏铁路公司"}],
         tableData: [],
         //显示加载中样式  
         loading:false,  
@@ -135,12 +136,13 @@ export default {
         exportForm: { 
             formType: 'formGo', //formBack, formGo 
             trainType: 2, //1Eur,2Asia
-            orgID: 19, 
+            orgID: '', 
             orgName: '',  
             departDateBegin:new Date(),
             departDateEnd:new Date(),
             realName: '',
-            mobile: ''
+            mobile: '',
+            status:2
         },  
         criteria: '',
         multipleSelection: [],
@@ -151,7 +153,7 @@ export default {
         //查询的页码
         start: 1, 
         //总记录数  
-        total:100,  
+        total:0,  
         //请求的URL
         url:'http://10.1.167.174:8080/CRExpress/export/view.htm',
         exporturl:'http://10.1.167.174:8080/CRExpress/export/out.htm',
@@ -172,8 +174,8 @@ export default {
     }
   },
     mounted () {
-        this.exportForm.departDateBegin = new Date('2018','00','01');
-        this.exportForm.departDateEnd = new Date('2018','00','31');
+        this.exportForm.departDateBegin = new Date();
+        this.exportForm.departDateEnd = new Date();
         // this.loadingData(this.exportForm.orgID, this.exportForm.departDateBegin,this.exportForm.departDateEnd, this.currentPage, this.pageSize);
     },
     methods: {
