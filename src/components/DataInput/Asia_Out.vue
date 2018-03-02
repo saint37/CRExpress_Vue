@@ -83,7 +83,7 @@
                         {{scope.row.departDate ? maxSlice(scope.row.departDate):scope.row.departDate}}
                     </template>
                 </el-table-column>
-                <el-table-column prop="exitPortStation" label="出境口岸站"></el-table-column>
+                <el-table-column prop="exitportStation" label="出境口岸站"></el-table-column>
                 <el-table-column prop="overseasStation" label="境外到站"></el-table-column>
                 <el-table-column prop="overseasCountry" label="境外到站所属国家"></el-table-column>
                 <el-table-column prop="overseasCity" label="境外到站所属城市"></el-table-column>
@@ -154,8 +154,8 @@
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="出境口岸站" prop="exitPortStation">  
-                            <el-input v-model="editForm.exitPortStation" auto-complete="off"></el-input>  
+                        <el-form-item label="出境口岸站" prop="exitportStation">  
+                            <el-input v-model="editForm.exitportStation" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
@@ -282,7 +282,7 @@ export default {
             mobile: ''
         },  
         options: [{
-          value: 4,
+          value: '',
           label: '全部'
         }, {
           value: 1,
@@ -295,7 +295,7 @@ export default {
         searchForm: {  
             formType: 'formGo', //formBack, formGo 
             trainType: 2, //1Eur,2Asia
-            status: 4,  //默认全部
+            status: '',  //默认全部
             departDateBegin: '',
             departDateEnd: '',
             orgID:19,
@@ -331,7 +331,7 @@ export default {
             fromStation: '',  
             trainNumber: '',  
             departDate: '', 
-            exitPortStation: '', 
+            exitportStation: '', 
             overseasStation: '',
             overseasCountry: '',
             overseasCity: '',
@@ -453,7 +453,7 @@ export default {
                     fromStation: _self.editForm.fromStation,  
                     trainNumber: _self.editForm.trainNumber,
                     departDate: Date1,
-                    exitPortStation: _self.editForm.exitPortStation, 
+                    exitportStation: _self.editForm.exitportStation, 
                     overseasStation: _self.editForm.overseasStation,
                     overseasCountry: _self.editForm.overseasCountry,
                     overseasCity: _self.editForm.overseasCity,
@@ -523,7 +523,7 @@ export default {
                     fromStation: _self.editForm.fromStation,  
                     trainNumber: _self.editForm.trainNumber,
                     departDate: Date1,
-                    exitPortStation: _self.editForm.exitPortStation, 
+                    exitportStation: _self.editForm.exitportStation, 
                     overseasStation: _self.editForm.overseasStation,
                     overseasCountry: _self.editForm.overseasCountry,
                     overseasCity: _self.editForm.overseasCity,

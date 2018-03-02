@@ -1,14 +1,14 @@
 <template>
     <el-main class="white">
         <el-row type="flex" justify="center">
-          <el-col :span="24" class="tct"><h1>一个奇怪的系统</h1></el-col>
+          <el-col :span="24" class="tct"><h1>中欧中亚班列运量统计管理系统</h1></el-col>
         </el-row>
         <el-row type="flex" justify="center">
             <el-col :span="6" class="tct loginform">
                 <el-form ref="form" label-width="80px">
                     <el-input v-model="name" placeholder="用户名" class="loginput"></el-input>
                     <el-input type="password" v-model="pwd" placeholder="密码" class="loginput" @keyup.enter.native="isLogin"></el-input>
-                    <el-button type="primary" round @click="isLogin" class="loginbtn">登录一下⊙∀⊙</el-button>
+                    <el-button type="primary" round @click="isLogin" class="loginbtn">登录</el-button>
                 </el-form>
             </el-col>
         </el-row>

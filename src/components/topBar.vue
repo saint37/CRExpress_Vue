@@ -15,7 +15,7 @@ export default {
   name: 'topBar',
   data () {
     return {
-      msg: '一个奇怪的系统',
+      msg: '中欧中亚班列运量统计管理系统',
       activeIndex: '1'
     }
   },

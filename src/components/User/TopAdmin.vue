@@ -94,13 +94,13 @@
         <el-dialog title="修改密码" :visible.sync="pwdFormVisible" :close-on-click-modal="false">  
             <el-form :model="pwdForm" label-width="80px" :rules="pwdFormRules" ref="pwdForm" size="small">  
                 <el-form-item label="原始密码" prop="password">  
-                    <el-input v-model="pwdForm.password" auto-complete="off"></el-input>  
+                    <el-input type="password" v-model="pwdForm.password" auto-complete="off"></el-input>  
                 </el-form-item>   
                 <el-form-item label="新密码" prop="newPassword">  
-                    <el-input v-model="pwdForm.newPassword"></el-input>  
+                    <el-input type="password" v-model="pwdForm.newPassword"></el-input>  
                 </el-form-item>
                 <el-form-item label="确认密码" prop="checkPass">  
-                    <el-input v-model="pwdForm.checkPass"></el-input>
+                    <el-input type="password" v-model="pwdForm.checkPass"></el-input>
                 </el-form-item> 
             </el-form>  
             <div slot="footer" class="dialog-footer">  
