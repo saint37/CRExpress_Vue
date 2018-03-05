@@ -117,7 +117,7 @@
                 <el-form-item label="真实姓名" prop="realName">  
                     <el-input v-model="editForm.realName"></el-input>  
                 </el-form-item>
-                <el-form-item label="性别" prop="gender">  
+                <el-form-item label="性别" prop="gender">
                     <el-radio-group v-model="editForm.gender">
                       <el-radio label="1">男</el-radio>
                       <el-radio label="2">女</el-radio>
@@ -193,6 +193,16 @@ export default {
           callback();
         }
     };
+    let validatemobile = (rule, value, callback) => {
+        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if (value == '') {
+          callback(new Error('请输入联系电话'));
+        } else if(!reg.test(value)){
+            callback(new Error('手机号格式不正确'));
+        } else {
+          callback();
+        }
+    };
     return {
         //CurrentUser: "Saint",
         CurrentUser : {
@@ -244,17 +254,6 @@ export default {
         //编辑界面是否显示
         createFormVisible: false,  
         createLoading: false,  
-        createFormRules: {  
-            realName: [  
-                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
-            ],
-            gender: [  
-                { required: true, message: '请选择性别', trigger: 'blur' }  
-            ],
-            mobile: [
-                { required: true, message: '请输入联系电话', trigger: 'blur' }
-            ]
-        },
         //创建用户
         createForm: {  
             username: '',
@@ -267,14 +266,20 @@ export default {
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
+            username: [  
+                { required: true, message: '请输入用户名', trigger: 'blur' },
+                { max:20, message:"不能超过20个字符", trigger:'change'+'blur'}
+            ],
             realName: [  
-                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
+                { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                { max:10, message:"不能超过10个字符", trigger:'change'+'blur'}
             ],
             gender: [  
                 { required: true, validator: validategender, trigger: 'blur' }
             ],
             mobile: [
-                { required: true, message: '请输入联系电话', trigger: 'blur' }
+                { required: true, message: '请输入联系电话', trigger: 'blur' },
+                { required: true, validator: validatemobile, trigger: 'change'+'blur' }
             ]
         },
         //编辑用户
@@ -399,11 +404,11 @@ export default {
         //表格编辑事件  
         editClick:function() {  
             let _self = this;
-            _self.editFormVisible = true;  
             _self.editForm.username = _self.CurrentUser.username;
             _self.editForm.realName = _self.CurrentUser.realName;
-            _self.editForm.gender = _self.CurrentUser.gender;
+            _self.editForm.gender = sessionStorage.gender;
             _self.editForm.mobile = _self.CurrentUser.mobile;
+            _self.editFormVisible = true;  
         },  
         editSubmit:function(formName){  
             let _self = this;

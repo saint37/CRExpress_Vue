@@ -198,6 +198,16 @@ export default {
           callback();
         }
     };
+    let validatemobile = (rule, value, callback) => {
+        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if (value == '') {
+          callback(new Error('请输入联系电话'));
+        } else if(!reg.test(value)){
+            callback(new Error('手机号格式不正确'));
+        } else {
+          callback();
+        }
+    };
     return {
         orgs:[{"id":19,"flag":1,"upperUnitId":0,"orgStr":"中国铁路总公司"},{"id":1,"flag":2,"upperUnitId":19,"orgStr":"哈尔滨铁路局"},{"id":2,"flag":2,"upperUnitId":19,"orgStr":"沈阳铁路局"},{"id":3,"flag":2,"upperUnitId":19,"orgStr":"北京铁路局"},{"id":4,"flag":2,"upperUnitId":19,"orgStr":"太原铁路局"},{"id":5,"flag":2,"upperUnitId":19,"orgStr":"呼和浩特铁路局"},{"id":6,"flag":2,"upperUnitId":19,"orgStr":"郑州铁路局"},{"id":7,"flag":2,"upperUnitId":19,"orgStr":"武汉铁路局"},{"id":8,"flag":2,"upperUnitId":19,"orgStr":"西安铁路局"},{"id":9,"flag":2,"upperUnitId":19,"orgStr":"济南铁路局"},{"id":10,"flag":2,"upperUnitId":19,"orgStr":"上海铁路局"},{"id":11,"flag":2,"upperUnitId":19,"orgStr":"南昌铁路局"},{"id":12,"flag":2,"upperUnitId":19,"orgStr":"广州铁路（集团）公司"},{"id":13,"flag":2,"upperUnitId":19,"orgStr":"南宁铁路局"},{"id":14,"flag":2,"upperUnitId":19,"orgStr":"成都铁路局"},{"id":15,"flag":2,"upperUnitId":19,"orgStr":"昆明铁路局"},{"id":16,"flag":2,"upperUnitId":19,"orgStr":"兰州铁路局"},{"id":17,"flag":2,"upperUnitId":19,"orgStr":"乌鲁木齐铁路局"},{"id":18,"flag":2,"upperUnitId":19,"orgStr":"青藏铁路公司"}],
         CurrentUser : {
@@ -250,17 +260,6 @@ export default {
         //编辑界面是否显示
         createFormVisible: false,  
         createLoading: false,  
-        createFormRules: {  
-            realName: [  
-                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
-            ],
-            gender: [  
-                { required: true, message: '请选择性别', trigger: 'blur' }  
-            ],
-            mobile: [
-                { required: true, message: '请输入联系电话', trigger: 'blur' }
-            ]
-        },
         //创建用户
         createForm: {  
             username: '',
@@ -273,14 +272,20 @@ export default {
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
+            username: [  
+                { required: true, message: '请输入用户名', trigger: 'blur' },
+                { max:20, message:"不能超过20个字符", trigger:'change'+'blur'}
+            ],
             realName: [  
-                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
+                { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                { max:10, message:"不能超过10个字符", trigger:'change'+'blur'}
             ],
             gender: [  
                 { required: true, validator: validategender, trigger: 'blur' }
             ],
             mobile: [
-                { required: true, message: '请输入联系电话', trigger: 'blur' }
+                { required: true, message: '请输入联系电话', trigger: 'blur' },
+                { required: true, validator: validatemobile, trigger: 'change'+'blur' }
             ]
         },
         //编辑用户
@@ -407,7 +412,7 @@ export default {
             _self.editFormVisible = true;  
             _self.editForm.username = _self.CurrentUser.username;
             _self.editForm.realName = _self.CurrentUser.realName;
-            _self.editForm.gender = _self.CurrentUser.gender;
+            _self.editForm.gender = sessionStorage.gender;
             _self.editForm.mobile = _self.CurrentUser.mobile;
         },  
         editSubmit:function(formName){  

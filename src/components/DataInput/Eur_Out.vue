@@ -317,8 +317,10 @@ export default {
         editLoading: false,  
         editFormRules: {  
             fromStation: [  
-                { required: true, message: '请输入发站', trigger: 'blur' }  
-            ]  
+                { required: true, message: '请输入发站', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5\(（\)）]{2,8}$/, message: '请输入2-8个中文', trigger:'change'+'blur' }
+            ],
+
         },  
         //编辑界面数据  
         editForm: {  

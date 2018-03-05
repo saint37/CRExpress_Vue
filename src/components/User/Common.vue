@@ -101,6 +101,16 @@ export default {
           callback();
         }
     };
+    let validatemobile = (rule, value, callback) => {
+        var reg=11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/;
+        if (value == '') {
+          callback(new Error('请输入联系电话'));
+        } else if(!reg.test(value)){
+            callback(new Error('手机号格式不正确'));
+        } else {
+          callback();
+        }
+    };
     return {
         CurrentUser : {
             userId: 0,
@@ -125,14 +135,20 @@ export default {
         editFormVisible: false,  
         editLoading: false,  
         editFormRules: {  
+            username: [  
+                { required: true, message: '请输入用户名', trigger: 'blur' },
+                { max:20, message:"不能超过20个字符", trigger:'change'+'blur'}
+            ],
             realName: [  
-                { required: true, message: '请输入真实姓名', trigger: 'blur' }  
+                { required: true, message: '请输入真实姓名', trigger: 'blur' },
+                { max:10, message:"不能超过10个字符", trigger:'change'+'blur'}
             ],
             gender: [  
                 { required: true, validator: validategender, trigger: 'blur' }
             ],
             mobile: [
-                { required: true, message: '请输入联系电话', trigger: 'blur' }
+                { required: true, message: '请输入联系电话', trigger: 'blur' },
+                { required: true, validator: validatemobile, trigger: 'change'+'blur' }
             ]
         },
         //编辑界面数据  
