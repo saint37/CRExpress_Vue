@@ -102,10 +102,10 @@
                         <el-table-column prop="heavyQtyFortyfive" label="重箱"></el-table-column>
                         <el-table-column prop="emptyQtyFortyfive" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="TEU" label="折合TEU"></el-table-column>
+                    <el-table-column prop="teu" label="折合TEU"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="" label="其中冷藏箱">
-                    <el-table-column prop="coldTEU" label="TEU"></el-table-column>
+                    <el-table-column prop="coldTEU" label="teu"></el-table-column>
                     <el-table-column prop="coldWeight" label="吨"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
@@ -132,7 +132,7 @@
             </el-col>  
         </el-row>  
         <!--编辑界面-->  
-        <el-dialog title="运量统计" :visible.sync="editFormVisible" :close-on-click-modal="false" fullscreen>  
+        <el-dialog title="运量统计" :visible.sync="editFormVisible" :close-on-click-modal="false"  width="80%">  
             <el-form :model="editForm" label-width="140px" :rules="editFormRules" ref="editForm" size="mini"> 
                 <el-row>
                     <el-col :span="6">
@@ -176,65 +176,65 @@
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="列数" prop="trainQty">  
-                            <el-input v-model="editForm.trainQty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.trainQty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="车数" prop="carriageQty">  
-                            <el-input v-model="editForm.carriageQty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.carriageQty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="20尺重箱数" prop="heavyQtyTwenty">  
-                            <el-input v-model="editForm.heavyQtyTwenty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.heavyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="20尺空箱数" prop="emptyQtyTwenty">  
-                            <el-input v-model="editForm.emptyQtyTwenty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.emptyQtyTwenty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="40尺重箱数" prop="heavyQtyForty">  
-                            <el-input v-model="editForm.heavyQtyForty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.heavyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="40尺空箱数" prop="emptyQtyForty">  
-                            <el-input v-model="editForm.emptyQtyForty" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.emptyQtyForty" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="6">
                         <el-form-item label="45尺重箱数" prop="heavyQtyFortyfive">  
-                            <el-input v-model="editForm.heavyQtyFortyfive" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.heavyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="45尺空箱数" prop="emptyQtyFortyfive">  
-                            <el-input v-model="editForm.emptyQtyFortyfive" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.emptyQtyFortyfive" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
                 <el-row>
                     <el-col :span="6">
-                        <el-form-item label="折合TEU" prop="TEU">  
-                            <el-input v-model="editForm.TEU" auto-complete="off"></el-input>  
+                        <el-form-item label="折合TEU" prop="teu">  
+                            <el-input v-model.number="editForm.teu" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="其中冷藏箱TEU" prop="coldTEU">  
-                            <el-input v-model="editForm.coldTEU" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.coldTEU" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                     <el-col :span="6">
                         <el-form-item label="冷藏箱重量" prop="coldWeight">  
-                            <el-input v-model="editForm.coldWeight" auto-complete="off"></el-input>  
+                            <el-input v-model.number="editForm.coldWeight" auto-complete="off"></el-input>  
                         </el-form-item> 
                     </el-col>
                 </el-row> 
@@ -289,7 +289,7 @@ export default {
         searchForm: {  
             formType: 'formBack', //formBack, formGo 
             trainType: 1, //1Eur,2Asia
-            status: 4,  //默认全部
+            status: '',  //默认全部
             departDateBegin: '',
             departDateEnd: '',
             orgID:19,
@@ -317,9 +317,72 @@ export default {
         editLoading: false,  
         editFormRules: {  
             portStation: [  
-                { required: true, message: '请输入发站', trigger: 'blur' }  
-            ]  
-        },  
+                { required: true, message: '请输入口岸站', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5\(（\)）]{2,8}$/, message: '请输入2-6个中文', trigger:'change'+'blur' }
+            ],
+            trainNumber: [  
+                { required: true, message: '请输入发车车次', trigger: 'blur' },
+                { pattern: /^[A-Za-z0-9]{2,10}$/, message: '请输入2-10位数字与字母', trigger:'change'+'blur' }
+            ],
+            departDate: [  
+                { type: 'date', required: true, message: '请选择发车日期', trigger: 'blur' },
+            ],
+            domesticStation: [  
+                { required: true, message: '请输入国内到站', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5\(（\)）]{2,8}$/, message: '请输入2-6个中文', trigger:'change'+'blur' }
+            ],
+            overseasStation: [  
+                { required: true, message: '请输入境外发站', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5A-Za-z]{2,15}$/, message: '请输入2-15位中文或英文', trigger:'change'+'blur' }
+            ],
+            overseasCountry: [  
+                { required: true, message: '请输入境外发站所属国', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5A-Za-z]{2,10}$/, message: '请输入2-10位中文或英文', trigger:'change'+'blur' }
+            ],
+            overseasCity: [  
+                { required: true, message: '请输入境外发站所属城市', trigger: 'blur' },
+                { pattern: /^[\u4E00-\u9FA5A-Za-z]{2,15}$/, message: '请输入2-15位中文或英文', trigger:'change'+'blur' }
+            ],
+            trainQty: [  
+                { required: true, type: 'number', max:10, min:0, message: '请输入0-10的数字', trigger:'change'+'blur' }
+            ],
+            carriageQty: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            heavyQtyTwenty: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            emptyQtyTwenty: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            heavyQtyForty: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            emptyQtyForty: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            heavyQtyFortyfive: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            emptyQtyFortyfive: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            teu: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            coldTEU: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            coldWeight: [  
+                { required: true, type: 'number', max:300, min:0, message: '请输入0-300的数字', trigger:'change'+'blur' }
+            ],
+            totalLoad: [  
+                { required: true, type: 'number', max:100, min:0, message: '请输入0-100的数字', trigger:'change'+'blur' }
+            ],
+            remark: [  
+                { max:100, min:0, message: '请输入备注', trigger:'change'+'blur' }
+            ],
+        },   
         //编辑界面数据  
         editForm: {  
             id: '',
@@ -338,7 +401,7 @@ export default {
             emptyQtyForty: 0,
             heavyQtyFortyfive: 0,
             emptyQtyFortyfive: 0,
-            TEU: 0,
+            teu: 0,
             coldTEU: 0,
             coldWeight: 0,
             totalLoad:0,
@@ -460,7 +523,7 @@ export default {
                     emptyQtyForty: _self.editForm.emptyQtyForty,
                     heavyQtyFortyfive: _self.editForm.heavyQtyFortyfive,
                     emptyQtyFortyfive: _self.editForm.emptyQtyFortyfive,
-                    TEU: _self.editForm.TEU,
+                    teu: _self.editForm.teu,
                     coldTEU: _self.editForm.coldTEU,
                     coldWeight: _self.editForm.coldWeight,
                     totalLoad: _self.editForm.totalLoad,
@@ -530,7 +593,7 @@ export default {
                     emptyQtyForty: _self.editForm.emptyQtyForty,
                     heavyQtyFortyfive: _self.editForm.heavyQtyFortyfive,
                     emptyQtyFortyfive: _self.editForm.emptyQtyFortyfive,
-                    TEU: _self.editForm.TEU,
+                    teu: _self.editForm.teu,
                     coldTEU: _self.editForm.coldTEU,
                     coldWeight: _self.editForm.coldWeight,
                     totalLoad: _self.editForm.totalLoad,
