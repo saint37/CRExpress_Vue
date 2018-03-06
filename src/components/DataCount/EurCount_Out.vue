@@ -60,12 +60,14 @@
                 tooltip-effect="dark"
                 show-summary
                 @selection-change="selectionChange">
-                <el-table-column type="selection" width="55" align="center">
-                </el-table-column> 
                 <!-- <el-table-column prop="id" label="序号"></el-table-column> -->
                 <el-table-column prop="fromStation" label="发站"></el-table-column>
                 <el-table-column prop="trainNumber" label="发车车次"></el-table-column>
-                <el-table-column prop="departDate" label="发车日期"></el-table-column>
+                <el-table-column prop="departDate" label="发车日期">
+                    <template scope="scope">
+                        {{scope.row.departDate ? maxSlice(scope.row.departDate):scope.row.departDate}}
+                    </template>
+                </el-table-column>
                 <el-table-column prop="exitportStation" label="出境口岸站"></el-table-column>
                 <el-table-column prop="overseasStation" label="境外到站"></el-table-column>
                 <el-table-column prop="overseasCountry" label="境外到站所属国家"></el-table-column>
@@ -85,10 +87,10 @@
                         <el-table-column prop="heavyQtyFortyfive" label="重箱"></el-table-column>
                         <el-table-column prop="emptyQtyFortyfive" label="空箱"></el-table-column>
                     </el-table-column>
-                    <el-table-column prop="TEU" label="折合TEU"></el-table-column>
+                    <el-table-column prop="teu" label="折合TEU"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="" label="其中冷藏箱">
-                    <el-table-column prop="coldTEU" label="TEU"></el-table-column>
+                    <el-table-column prop="coldTEU" label="teu"></el-table-column>
                     <el-table-column prop="coldWeight" label="吨"></el-table-column>
                 </el-table-column>
                 <el-table-column prop="remark" label="备注"></el-table-column>
@@ -173,11 +175,14 @@ export default {
     }
   },
     mounted () {
-        this.exportForm.departDateBegin = new Date();
+        this.exportForm.departDateBegin = new Date(2018,0,1);
         this.exportForm.departDateEnd = new Date();
-        // this.loadingData(this.exportForm.orgID, this.exportForm.departDateBegin,this.exportForm.departDateEnd, this.currentPage, this.pageSize);
+        this.loadingData(this.exportForm.orgID, this.exportForm.departDateBegin,this.exportForm.departDateEnd, this.currentPage, this.pageSize);
     },
     methods: {
+        maxSlice(v){
+            return v.length > 10? v.slice(0,10) : v;
+        },
         //表格加载数据  
         loadingData:function(orgID,DateBegin,DateEnd,pageNum, pageSize) {  
             let _self = this;  

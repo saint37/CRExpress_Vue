@@ -62,89 +62,89 @@ export default new Router({
         {
           path: '/User/Admin',
           name: 'Admin',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Admin
         },
         {
           path: '/User/TopAdmin',
           name: 'TopAdmin',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: TopAdmin
         },
         {
           path: '/User/Common',
           name: 'Common',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Common
         },
         {
           path: '/DataInput/Eur_Out',
           name: 'Eur_Out',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Eur_Out
         },
         {
           path: '/DataInput/Eur_In',
           name: 'Eur_In',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Eur_In
         },
         {
           path: '/DataInput/Asia_Out',
           name: 'Asia_Out',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Asia_Out
         },
         {
           path: '/DataInput/Asia_In',
           name: 'Asia_In',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: Asia_In
         },
         {
           path: '/DataCount/EurCount_Out',
           name: 'EurCount_Out',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: EurCount_Out
         },
         {
           path: '/DataCount/AsiaCount_Out',
           name: 'AsiaCount_Out',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: AsiaCount_Out
         },
         {
           path: '/DataCount/EurCount_In',
           name: 'EurCount_In',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: EurCount_In
         },
         {
           path: '/DataCount/AsiaCount_In',
           name: 'AsiaCount_In',
-          // meta: {
-          //    requireAuth: true,  
-          //   }, 
+          meta: {
+             requireAuth: true,  
+            }, 
           component: AsiaCount_In
         }
       ]

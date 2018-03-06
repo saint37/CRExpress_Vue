@@ -423,7 +423,7 @@ export default {
     mounted () {
         this.searchForm.orgID = sessionStorage.orgId;
         this.searchForm.orgName = sessionStorage.orgName;
-        this.searchForm.departDateBegin = new Date();
+        this.searchForm.departDateBegin = new Date(2018,0,1);
         this.searchForm.departDateEnd = new Date();
         this.saveForm.realName = sessionStorage.realName;
         this.saveForm.mobile = sessionStorage.mobile;

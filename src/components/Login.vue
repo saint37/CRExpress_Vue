@@ -73,7 +73,15 @@ export default {
                     //console.log(response.data.object);
                     this.name=''
                     this.pwd= ''
-                    this.$router.push({ path: '/index' }) 
+                    if(response.data.object.roleId == 1) {
+                        this.$router.push({ path: '/User/TopAdmin' });
+                    }
+                    else if(response.data.object.roleId == 2){
+                        this.$router.push({ path: '/User/Admin' });
+                    }
+                    else {
+                        this.$router.push({ path: '/User/Common' });
+                    }
                 }else{
                     this.$alert('请输入正确的用户名和密码！');
                     this.name=''
